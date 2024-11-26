@@ -4,9 +4,10 @@ import { LayoutsComponent } from './layouts.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { PagesModule } from '../pages/pages.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
-  declarations: [LayoutsComponent, HeaderComponent, FooterComponent],
+  declarations: [LayoutsComponent, HeaderComponent, FooterComponent, SidebarComponent],
   imports: [CommonModule, PagesModule],
   exports: [LayoutsComponent],
 })
