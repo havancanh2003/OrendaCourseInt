@@ -1,0 +1,6 @@
+<app-header [defaltLink]="currenPage" (checkedChangePage)="currenPage = $event"></app-header>
+<main>
+    <app-dashboard *ngIf="currenPage === 'dashboard'"></app-dashboard>
+    <app-product-page *ngIf="currenPage === 'product'"></app-product-page>
+</main>
+<app-footer></app-footer>
