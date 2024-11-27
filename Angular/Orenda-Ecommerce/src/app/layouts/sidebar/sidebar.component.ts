@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
-
+  @Input() defaltLink = 'dashboard';
+  @Output() checkedChangePage = new EventEmitter<string>();
+  switchPage(page: string) {
+    console.log(page);
+    this.checkedChangePage.emit(page);
+  }
 }
