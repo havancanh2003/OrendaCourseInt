@@ -1,7 +1,8 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
-import { Product } from '../../core/models/product.model';
+import { Category, Product } from '../../core/models/product.model';
 import { CategoryService } from '../../core/services/category.service';
+import { formatDate } from '../../helpers/helpers';
 
 @Component({
   selector: 'app-product-page',
@@ -10,6 +11,8 @@ import { CategoryService } from '../../core/services/category.service';
 })
 export class ProductPageComponent implements OnInit {
   products: Product[] = [];
+  categories: Category[] = [];
+  isActiveCatogory: boolean = false;
   isPopupVisible: boolean = false;
   productIdActive: number = 0;
   constructor(
@@ -19,6 +22,7 @@ export class ProductPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+    this.categories = this.categoryService.getCategories();
   }
 
   loadProducts(): void {
@@ -30,16 +34,6 @@ export class ProductPageComponent implements OnInit {
     return c != null ? c.categoryName : '';
   }
 
-  formatDate(date: Date): string {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    const formattedDate = `${day < 10 ? '0' + day : day}/${
-      month < 10 ? '0' + month : month
-    }/${year}`;
-    return formattedDate;
-  }
   deleteProduct(productId: number) {
     if (productId <= 0) return;
     const isAccept = confirm('Bạn có chắc muốn xoá sản phẩm này không?');
@@ -65,5 +59,16 @@ export class ProductPageComponent implements OnInit {
       this.loadProducts();
     }
     this.isPopupVisible = false;
+  }
+  getFormattedExpiryDate(date: Date): string {
+    return formatDate(date);
+  }
+  ///
+  clearSelectedCategory() {
+    this.isActiveCatogory = false;
+    this.loadProducts();
+  }
+  selectedCategory(categoryId: number) {
+    this.products = this.productService.getProductByCategoryId(categoryId);
   }
 }

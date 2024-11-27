@@ -15,46 +15,46 @@ export class ProductService {
       expiryDate: new Date(2025, 0, 15),
       categoryId: 1,
     },
-    // {
-    //   productId: 2,
-    //   productName: 'Laptop',
-    //   unitSold: 200,
-    //   productStock: 30,
-    //   expiryDate: new Date(2026, 4, 20),
-    //   categoryId: 1,
-    // },
-    // {
-    //   productId: 3,
-    //   productName: 'Refrigerator',
-    //   unitSold: 150,
-    //   productStock: 20,
-    //   expiryDate: new Date(2030, 6, 10),
-    //   categoryId: 4,
-    // },
-    // {
-    //   productId: 4,
-    //   productName: 'Washing Machine',
-    //   unitSold: 100,
-    //   productStock: 15,
-    //   expiryDate: new Date(2031, 3, 18),
-    //   categoryId: 4,
-    // },
-    // {
-    //   productId: 5,
-    //   productName: 'Novel Book',
-    //   unitSold: 800,
-    //   productStock: 100,
-    //   expiryDate: new Date(2030, 11, 31),
-    //   categoryId: 2,
-    // },
-    // {
-    //   productId: 6,
-    //   productName: 'Children Toy',
-    //   unitSold: 300,
-    //   productStock: 40,
-    //   expiryDate: new Date(2030, 9, 22),
-    //   categoryId: 5,
-    // },
+    {
+      productId: 2,
+      productName: 'Laptop',
+      unitSold: 200,
+      productStock: 30,
+      expiryDate: new Date(2026, 4, 20),
+      categoryId: 1,
+    },
+    {
+      productId: 3,
+      productName: 'Refrigerator',
+      unitSold: 150,
+      productStock: 20,
+      expiryDate: new Date(2030, 6, 10),
+      categoryId: 4,
+    },
+    {
+      productId: 4,
+      productName: 'Washing Machine',
+      unitSold: 100,
+      productStock: 15,
+      expiryDate: new Date(2031, 3, 18),
+      categoryId: 4,
+    },
+    {
+      productId: 5,
+      productName: 'Novel Book',
+      unitSold: 800,
+      productStock: 100,
+      expiryDate: new Date(2030, 11, 31),
+      categoryId: 2,
+    },
+    {
+      productId: 6,
+      productName: 'Children Toy',
+      unitSold: 300,
+      productStock: 40,
+      expiryDate: new Date(2030, 9, 22),
+      categoryId: 5,
+    },
     // {
     //   productId: 7,
     //   productName: 'T-Shirt',
@@ -97,6 +97,10 @@ export class ProductService {
   getProductById(id: number): Product | null {
     const product = this.products.find((p) => p.productId === id);
     return product ? product : null;
+  }
+
+  getProductByCategoryId(id: number): Product[] {
+    return this.products.filter((product) => product.categoryId === id);
   }
 
   addProduct(product: Product): boolean {

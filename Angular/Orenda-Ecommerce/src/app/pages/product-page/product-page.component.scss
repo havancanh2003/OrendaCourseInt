@@ -12,3 +12,9 @@
   z-index: 20;
   background-color: rgba(27, 22, 22, 0.3);
 }
+.tr-category {
+  &.active {
+    background-color: #4b49ac;
+    color: #ffff;
+  }
+}
