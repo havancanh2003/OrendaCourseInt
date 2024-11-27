@@ -9,7 +9,6 @@ export class SidebarComponent {
   @Input() defaltLink = 'dashboard';
   @Output() checkedChangePage = new EventEmitter<string>();
   switchPage(page: string) {
-    console.log(page);
     this.checkedChangePage.emit(page);
   }
 }
