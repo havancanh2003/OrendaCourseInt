@@ -12,7 +12,7 @@ import { formatDate } from '../../helpers/helpers';
 export class ProductPageComponent implements OnInit {
   products: Product[] = [];
   categories: Category[] = [];
-  isActiveCatogory: boolean = false;
+  isActiveCatogory: number = 0;
   isPopupVisible: boolean = false;
   productIdActive: number = 0;
   constructor(
@@ -65,10 +65,11 @@ export class ProductPageComponent implements OnInit {
   }
   ///
   clearSelectedCategory() {
-    this.isActiveCatogory = false;
+    this.isActiveCatogory = 0;
     this.loadProducts();
   }
-  selectedCategory(categoryId: number) {
+  selectedCategory(categoryId: number, i: number) {
+    this.isActiveCatogory = i;
     this.products = this.productService.getProductByCategoryId(categoryId);
   }
 }

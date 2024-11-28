@@ -28,12 +28,4 @@ export class AuthService {
     this.isAuthenticated = false;
     this.loggedInUser = null;
   }
-
-  isLoggedIn(): boolean {
-    return this.isAuthenticated;
-  }
-
-  getLoggedInUser(): string | null {
-    return this.loggedInUser;
-  }
 }
