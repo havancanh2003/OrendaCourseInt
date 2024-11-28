@@ -6,7 +6,7 @@
                 <div style="display: flex; justify-content: space-between" class="w-100">
                     <h4 class="card-title">Table Product</h4>
                     <button type="button" (click)="addProduct()" class="btn btn-inverse-primary btn-fw">
-                        Add Product 1232
+                        Add Product
                     </button>
                 </div>
                 <p class="card-description">Danh sách sản phẩm</p>
@@ -88,7 +88,6 @@
     </div>
 </div>
 <div class="container-form-product" *ngIf="isPopupVisible">
-    <!-- <app-form-product (isSubmit)="outputAction($event)" [id]="productIdActive" class="w-50"></app-form-product> -->
     <app-form-create-update-product (isSubmit)="outputAction($event)" [id]="productIdActive"
         class="w-50"></app-form-create-update-product>
 </div>

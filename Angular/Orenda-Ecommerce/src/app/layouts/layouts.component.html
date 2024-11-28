@@ -1,4 +1,4 @@
-<app-login *ngIf="!isLoginSucces" (isSucces)="isLoginSucces = $event"></app-login>
+<app-login *ngIf="!isLoginSucces" (isSucces)="handleLoginSuccess($event)"></app-login>
 <div *ngIf="isLoginSucces" class="container-scroller">
   <app-header></app-header>
   <div class="container-fluid page-body-wrapper">
