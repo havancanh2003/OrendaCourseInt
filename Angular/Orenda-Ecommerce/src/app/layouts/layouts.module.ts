@@ -8,7 +8,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarSkinsComponent } from './sidebar-skins/sidebar-skins.component';
 
 @NgModule({
-  declarations: [LayoutsComponent, HeaderComponent, FooterComponent, SidebarComponent, SidebarSkinsComponent],
+  declarations: [
+    LayoutsComponent,
+    HeaderComponent,
+    FooterComponent,
+    SidebarComponent,
+    SidebarSkinsComponent,
+  ],
   imports: [CommonModule, PagesModule],
   exports: [LayoutsComponent],
 })

@@ -1,8 +1,8 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ProductService } from '../../core/services/product.service';
-import { Category, Product } from '../../core/models/product.model';
-import { CategoryService } from '../../core/services/category.service';
-import { formatDate } from '../../helpers/helpers';
+import { Component, OnInit } from '@angular/core';
+import { Category, Product } from '../../../core/models/product.model';
+import { ProductService } from '../../../core/services/product.service';
+import { CategoryService } from '../../../core/services/category.service';
+import { formatDate } from '../../../helpers/helpers';
 
 @Component({
   selector: 'app-product-page',
