@@ -4,10 +4,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductPageComponent } from './product-page/product-page.component';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
+import { LoginComponent } from './login/login.component';
+import { FormsModule, NgModel } from '@angular/forms';
 
 @NgModule({
-  declarations: [DashboardComponent, ProductPageComponent],
-  imports: [CommonModule, CoreModule, SharedModule],
-  exports: [DashboardComponent, ProductPageComponent],
+  declarations: [DashboardComponent, ProductPageComponent, LoginComponent],
+  imports: [CommonModule, CoreModule, SharedModule, FormsModule],
+  exports: [DashboardComponent, ProductPageComponent, LoginComponent],
 })
 export class PagesModule {}

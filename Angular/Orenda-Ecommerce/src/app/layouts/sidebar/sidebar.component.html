@@ -1,7 +1,7 @@
 <nav>
   <ul class="nav">
     <li class="nav-item">
-      <a href="javascript:void(0)" (click)="switchPage('dashboard')" [class.active]="defaltLink === 'dashboard'"
+      <a href="javascript:void(0)" (click)="switchPage('dashboard')" [class.active]="currenPage === 'dashboard'"
         class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard</span>
@@ -121,7 +121,7 @@
       </div>
     </li> -->
     <li class="nav-item">
-      <a href="javascript:void(0)" (click)="switchPage('product')" [class.active]="defaltLink === 'product'"
+      <a href="javascript:void(0)" (click)="switchPage('product')" [class.active]="currenPage === 'product'"
         class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Product-page</span>

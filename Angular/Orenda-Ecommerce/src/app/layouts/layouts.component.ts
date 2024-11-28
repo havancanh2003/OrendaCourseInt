@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class LayoutsComponent {
   currenPage: string = 'dashboard';
+  isLoginSucces: boolean = false;
 }
