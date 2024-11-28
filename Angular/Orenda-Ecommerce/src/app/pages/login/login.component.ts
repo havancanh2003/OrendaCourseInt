@@ -1,4 +1,4 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  @Output() isSucces = new EventEmitter<boolean>();
   username: string = '';
   password = '';
   errorMessage = '';
@@ -14,13 +15,11 @@ export class LoginComponent {
   constructor(private authService: AuthService) {}
 
   submitlogin(): void {
-    //@Output() isSucces = new EventEmitter<boolean>();
-    console.log(1);
-    // if (this.authService.login(this.username, this.password)) {
-    //   this.errorMessage = '';
-    //   //this.router.navigate(['/home']); // Điều hướng đến trang Home
-    // } else {
-    //   this.errorMessage = 'Invalid username or password!';
-    // }
+    if (this.authService.login(this.username, this.password)) {
+      this.errorMessage = '';
+      this.isSucces.emit(true);
+    } else {
+      this.errorMessage = 'Invalid username or password!';
+    }
   }
 }
