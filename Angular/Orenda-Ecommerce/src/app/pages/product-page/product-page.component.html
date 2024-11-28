@@ -2,16 +2,9 @@
   <div class="col-lg-8">
     <div class="card">
       <div class="card-body">
-        <div
-          style="display: flex; justify-content: space-between"
-          class="w-100"
-        >
+        <div style="display: flex; justify-content: space-between" class="w-100">
           <h4 class="card-title">Table Product</h4>
-          <button
-            type="button"
-            (click)="addProduct()"
-            class="btn btn-inverse-primary btn-fw"
-          >
+          <button type="button" (click)="addProduct()" class="btn btn-inverse-primary btn-fw">
             Add Product
           </button>
         </div>
@@ -37,25 +30,17 @@
                 <td>
                   <label class="badge badge-info">{{
                     getFormattedExpiryDate(p.expiryDate)
-                  }}</label>
+                    }}</label>
                 </td>
                 <td>{{ getCategoryName(p.categoryId) }}</td>
                 <!-- <td><label class="badge badge-success">Active</label></td> -->
                 <td>
-                  <button
-                    (click)="updateProduct(p.productId)"
-                    type="button"
-                    class="btn btn-primary btn-icon-text"
-                  >
+                  <button (click)="updateProduct(p.productId)" type="button" class="btn btn-primary btn-icon-text">
                     <i class="ti-file btn-icon-prepend"></i>
                     Edit
                   </button>
-                  <button
-                    (click)="deleteProduct(p.productId)"
-                    style="margin-left: 10px"
-                    type="button"
-                    class="btn btn-outline-primary btn-icon-text"
-                  >
+                  <button (click)="deleteProduct(p.productId)" style="margin-left: 10px" type="button"
+                    class="btn btn-outline-primary btn-icon-text">
                     Delete
                   </button>
                 </td>
@@ -69,10 +54,7 @@
   <div class="mt-3 mt-lg-0 col-lg-4">
     <div class="card">
       <div class="card-body">
-        <div
-          style="display: flex; justify-content: space-between"
-          class="w-100"
-        >
+        <div style="display: flex; justify-content: space-between" class="w-100">
           <h4 class="card-title">Table Category</h4>
           <button type="button" class="btn btn-inverse-primary btn-fw">
             Add Category
@@ -87,23 +69,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                class="tr-category"
-                *ngFor="let c of categories; let i = index"
+              <tr class="tr-category" *ngFor="let c of categories; let i = index"
                 (dblclick)="selectedCategory(c.categoryId, i + 1)"
-                [ngClass]="isActiveCatogory === c.categoryId ? 'active' : ''"
-              >
+                [ngClass]="isActiveCatogory === c.categoryId ? 'active' : ''">
                 <td>{{ c.categoryName }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <button
-          style="margin-top: 10px"
-          (click)="clearSelectedCategory()"
-          type="button"
-          class="btn btn-inverse-primary btn-fw"
-        >
+        <button style="margin-top: 10px" (click)="clearSelectedCategory()" type="button"
+          class="btn btn-inverse-primary btn-fw">
           Delete Selected
         </button>
       </div>
@@ -111,9 +86,6 @@
   </div>
 </div>
 <div class="container-form-product" *ngIf="isPopupVisible">
-  <app-form-product
-    (isSubmit)="outputAction($event)"
-    [id]="productIdActive"
-    class="w-50"
-  ></app-form-product>
+  <app-form-create-update-product (isSubmit)="outputAction($event)" [id]="productIdActive"
+    class="w-50"></app-form-create-update-product>
 </div>
