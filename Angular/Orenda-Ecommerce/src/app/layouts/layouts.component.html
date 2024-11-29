@@ -9,8 +9,10 @@
       <div class="content-wrapper">
         <app-dashboard *ngIf="currenPage === 'dashboard'"></app-dashboard>
         <app-product-page *ngIf="currenPage === 'product'"></app-product-page>
+        <app-profile-page *ngIf="currenPage === 'profile'"></app-profile-page>
       </div>
       <app-footer></app-footer>
     </div>
   </div>
 </div>
+<app-loading [isLoading]="(isLoading$ | async) ?? false"></app-loading>
