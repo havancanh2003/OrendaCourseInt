@@ -28,6 +28,10 @@ export class AuthService {
     const url = `${this._BASEURL}/api/app/account/get-account-bootstrap`;
     return this.http.get(url);
   }
+  logoutUser(): Observable<any> {
+    const url = `${this._BASEURL}/api/app/account/logout`;
+    return this.http.post(url, {});
+  }
 
   updateUser(u: User): Observable<any> {
     const url = `${this._BASEURL}/api/app/account/update-account-info`;

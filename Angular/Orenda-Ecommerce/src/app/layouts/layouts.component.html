@@ -1,6 +1,6 @@
 <app-login *ngIf="!isLoginSucces" (isSucces)="handleLoginSuccess($event)"></app-login>
 <div *ngIf="isLoginSucces" class="container-scroller">
-  <app-header></app-header>
+  <app-header (isLogOut)="isLoginSucces = !$event"></app-header>
   <div class="container-fluid page-body-wrapper">
     <app-sidebar-skins></app-sidebar-skins>
     <app-sidebar [currenPage]="currenPage" (checkedChangePage)="currenPage = $event" class="sidebar sidebar-offcanvas"
