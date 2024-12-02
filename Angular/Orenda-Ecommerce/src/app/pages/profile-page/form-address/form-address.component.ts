@@ -1,13 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressService } from '../../../core/services/address.service';
-import { cutConcatenate } from '../../../helpers/helpers';
 
 @Component({
   selector: 'app-form-address',
@@ -17,6 +9,10 @@ import { cutConcatenate } from '../../../helpers/helpers';
 export class FormAddressComponent implements OnInit {
   @Input() currentAddress: any;
   @Output() addressChange = new EventEmitter<{}>();
+
+  TYPE_PROVINCE = 'province';
+  TYPE_DISTRICT = 'district';
+  TYPE_WARD = 'ward';
 
   provinces: any[] = [];
   districts: any[] = [];
@@ -71,9 +67,51 @@ export class FormAddressComponent implements OnInit {
   }
   saveAddress() {
     const addressChanged = {
-      selectedProvince: this.selectedProvince,
-      selectedDistrict: this.selectedDistrict,
-      selectedWard: this.selectedWard,
+      code: {
+        selectedProvince: this.selectedProvince,
+        selectedDistrict: this.selectedDistrict,
+        selectedWard: this.selectedWard,
+      },
+      name:
+        this.getNameAddressByCode(this.selectedProvince, this.TYPE_PROVINCE) +
+        ' - ' +
+        this.getNameAddressByCode(this.selectedDistrict, this.TYPE_DISTRICT) +
+        ' - ' +
+        this.getNameAddressByCode(this.selectedWard, this.TYPE_WARD),
     };
+
+    this.addressChange.emit(addressChanged);
+  }
+  getNameAddressByCode(code: string, typeGet: string): string {
+    let nameFilter = '';
+
+    switch (typeGet) {
+      case this.TYPE_PROVINCE:
+        const province = this.provinces.find((a) => a.value === code);
+        if (province) {
+          nameFilter = province.displayText;
+        }
+        break;
+
+      case this.TYPE_DISTRICT:
+        const district = this.districts.find((a) => a.value === code);
+        if (district) {
+          nameFilter = district.displayText;
+        }
+        break;
+
+      case this.TYPE_WARD:
+        const ward = this.wards.find((a) => a.value === code);
+        if (ward) {
+          nameFilter = ward.displayText;
+        }
+        break;
+
+      default:
+        console.warn('Loại địa chỉ không hợp lệ:', typeGet);
+        break;
+    }
+
+    return nameFilter;
   }
 }

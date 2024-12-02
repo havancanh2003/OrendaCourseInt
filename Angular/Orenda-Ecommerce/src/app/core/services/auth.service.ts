@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../models/user.model';
+import { User, UserUpdate } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,21 +33,8 @@ export class AuthService {
     return this.http.post(url, {});
   }
 
-  updateUser(u: User): Observable<any> {
+  updateUser(body: UserUpdate): Observable<any> {
     const url = `${this._BASEURL}/api/app/account/update-account-info`;
-    const body = {
-      userId: u.id,
-      avatarDocumentId: null,
-      email: u.email,
-      phoneNumber: u.phoneNumber,
-      name: u.fullName,
-      ngaySinh: u.birthDay,
-      gioiTinh: u.gender,
-      diaChi: null,
-      maTinh: null,
-      maHuyen: null,
-      maXa: null,
-    };
     return this.http.post(url, body);
   }
 }
