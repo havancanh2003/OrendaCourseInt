@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../core/services/auth.service';
 import { getCookie } from '../helpers/helpers';
 import { Observable } from 'rxjs';
