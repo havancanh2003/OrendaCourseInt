@@ -12,7 +12,7 @@ import { StateLoadingService } from '../shared/loading/state-loading.service';
 export class LayoutsComponent implements OnInit {
   isLoading$: Observable<boolean>;
   currenPage: string = 'dashboard';
-  isLoginSucces: boolean = false;
+  isLoginSucces: boolean = true;
   logoutTimeout: any;
 
   constructor(private loadingService: StateLoadingService) {
@@ -20,12 +20,12 @@ export class LayoutsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const access_token = getCookie('access_token');
-    if (access_token) {
-      this.isLoginSucces = true;
-    } else {
-      this.isLoginSucces = false;
-    }
+    // const access_token = getCookie('access_token');
+    // if (access_token) {
+    //   this.isLoginSucces = true;
+    // } else {
+    //   this.isLoginSucces = false;
+    // }
   }
 
   handleLoginSuccess(sesstionLogin: boolean): void {

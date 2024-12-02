@@ -7,6 +7,7 @@ import { PagesModule } from '../pages/pages.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarSkinsComponent } from './sidebar-skins/sidebar-skins.component';
 import { SharedModule } from '../shared/shared.module';
+import { LayoutsRoutingModule } from './layouts-routing.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { SharedModule } from '../shared/shared.module';
     SidebarComponent,
     SidebarSkinsComponent,
   ],
-  imports: [CommonModule, PagesModule, SharedModule],
+  imports: [CommonModule, PagesModule, SharedModule, LayoutsRoutingModule],
   exports: [LayoutsComponent],
 })
 export class LayoutsModule {}
