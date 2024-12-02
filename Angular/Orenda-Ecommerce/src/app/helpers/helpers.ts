@@ -17,3 +17,30 @@ export function getCookie(name: any) {
 export function clearToken(): void {
   document.cookie = 'access_token=; max-age=0; path=/';
 }
+export function concatenate(
+  provinceId: string,
+  districtId: string,
+  wardId: string
+): string {
+  return `${provinceId}-${districtId}-${wardId}`;
+}
+
+export function cutConcatenate(idAdd: string) {
+  const parts = idAdd.split('-');
+
+  if (parts.length !== 3) {
+    throw new Error(
+      'Chuỗi không hợp lệ. Cần có ba phần: provinceId-districtId-communeId'
+    );
+  }
+
+  return {
+    provinceId: parts[0],
+    districtId: parts[1],
+    wardId: parts[2],
+  };
+}
+
+export function isObjectEmpty(obj: object): boolean {
+  return Object.keys(obj).length === 0;
+}

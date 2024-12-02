@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../core/models/user.model';
-import { formatDate } from '../../helpers/helpers';
+import { concatenate, formatDate, isObjectEmpty } from '../../helpers/helpers';
 
 @Component({
   selector: 'app-profile-page',
@@ -24,6 +24,9 @@ export class ProfilePageComponent implements OnInit {
 
   dateAsString: string = '';
 
+  isPopupAddressVisible: boolean = false;
+  idInfoAdd: any;
+
   constructor(private auth: AuthService) {}
   ngOnInit(): void {
     this.auth.getInfo().subscribe((res: any) => {
@@ -44,6 +47,17 @@ export class ProfilePageComponent implements OnInit {
             role: data.roleLevel ?? 'customer',
           };
           this.dateAsString = formatDate(new Date(this.infoUser.birthDay));
+          if (
+            data.maTinh != null &&
+            data.maHuyen != null &&
+            data.maXa != null
+          ) {
+            this.idInfoAdd = {
+              provinceId: data.maTinh.toString(),
+              districtId: data.maHuyen.toString(),
+              wardId: data.maXa.toString(),
+            };
+          }
         }
       }
     });
@@ -56,13 +70,23 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
+  changeAddress() {
+    this.isPopupAddressVisible = true;
+  }
+
+  showChangedAddress(addressChanged: {}) {
+    if (!isObjectEmpty(addressChanged)) {
+      console.log(addressChanged);
+    }
+    this.isPopupAddressVisible = false;
+  }
+
   onSubmitUpdateInfo() {
     this.auth.updateUser(this.infoUser).subscribe((res: any) => {
       if (res) {
         alert('Update thành công');
         const data = res.userSession;
         if (data) {
-          console.log(data);
           this.infoUser = {
             id: data.id,
             userName: data.userName,

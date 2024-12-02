@@ -61,8 +61,9 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputLocation">Location</label>
-                                <input class="form-control" id="inputLocation" type="text" name="location"
+                                <input readonly class="form-control" id="inputLocation" type="text" name="location"
                                     placeholder="Enter your location" [(ngModel)]="infoUser.location">
+                                <i (click)="changeAddress()" class="fa-solid fa-house">changeAddress</i>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -91,4 +92,9 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="container-form-address" *ngIf="isPopupAddressVisible">
+    <app-form-address [currentAddress]="idInfoAdd" (addressChange)="showChangedAddress($event)"
+        class="w-50"></app-form-address>
 </div>
