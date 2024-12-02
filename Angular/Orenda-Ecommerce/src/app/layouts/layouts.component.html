@@ -1,23 +1,18 @@
-<app-login
-  *ngIf="!isLoginSucces"
-  (isSucces)="isLoginSucces = $event"
-></app-login>
+<app-login *ngIf="!isLoginSucces" (isSucces)="handleLoginSuccess($event)"></app-login>
 <div *ngIf="isLoginSucces" class="container-scroller">
-  <app-header></app-header>
+  <app-header (isLogOut)="isLoginSucces = !$event"></app-header>
   <div class="container-fluid page-body-wrapper">
     <app-sidebar-skins></app-sidebar-skins>
-    <app-sidebar
-      [currenPage]="currenPage"
-      (checkedChangePage)="currenPage = $event"
-      class="sidebar sidebar-offcanvas"
-      id="sidebar"
-    ></app-sidebar>
+    <app-sidebar [currenPage]="currenPage" (checkedChangePage)="currenPage = $event" class="sidebar sidebar-offcanvas"
+      id="sidebar"></app-sidebar>
     <div class="main-panel">
       <div class="content-wrapper">
         <app-dashboard *ngIf="currenPage === 'dashboard'"></app-dashboard>
         <app-product-page *ngIf="currenPage === 'product'"></app-product-page>
+        <app-profile-page *ngIf="currenPage === 'profile'"></app-profile-page>
       </div>
       <app-footer></app-footer>
     </div>
   </div>
 </div>
+<app-loading [isLoading]="(isLoading$ | async) ?? false"></app-loading>

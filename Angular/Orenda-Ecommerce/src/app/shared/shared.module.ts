@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormProductComponent } from './form-product/form-product.component';
 import { FormsModule } from '@angular/forms';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
-  declarations: [FormProductComponent],
+  declarations: [LoadingComponent],
   imports: [CommonModule, FormsModule],
-  exports: [FormProductComponent],
+  exports: [LoadingComponent],
 })
 export class SharedModule {}

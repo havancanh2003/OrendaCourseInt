@@ -1,18 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   Category,
   ProductModelCreateAndUpdate,
-} from '../../core/models/product.model';
-import { ProductService } from '../../core/services/product.service';
-import { CategoryService } from '../../core/services/category.service';
-import { formatDate } from '../../helpers/helpers';
+} from '../../../core/models/product.model';
+import { ProductService } from '../../../core/services/product.service';
+import { CategoryService } from '../../../core/services/category.service';
+import { formatDate } from '../../../helpers/helpers';
 
 @Component({
-  selector: 'app-form-product',
-  templateUrl: './form-product.component.html',
-  styleUrl: './form-product.component.scss',
+  selector: 'app-form-create-update-product',
+  templateUrl: './form-create-update-product.component.html',
+  styleUrl: './form-create-update-product.component.scss',
 })
-export class FormProductComponent implements OnInit {
+export class FormCreateUpdateProductComponent {
   @Input() id: number = 0;
   @Output() isSubmit = new EventEmitter<boolean>();
   titleForm: string = '';

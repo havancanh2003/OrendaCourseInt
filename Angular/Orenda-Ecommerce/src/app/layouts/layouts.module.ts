@@ -6,10 +6,17 @@ import { FooterComponent } from './footer/footer.component';
 import { PagesModule } from '../pages/pages.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarSkinsComponent } from './sidebar-skins/sidebar-skins.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [LayoutsComponent, HeaderComponent, FooterComponent, SidebarComponent, SidebarSkinsComponent],
-  imports: [CommonModule, PagesModule],
+  declarations: [
+    LayoutsComponent,
+    HeaderComponent,
+    FooterComponent,
+    SidebarComponent,
+    SidebarSkinsComponent,
+  ],
+  imports: [CommonModule, PagesModule, SharedModule],
   exports: [LayoutsComponent],
 })
 export class LayoutsModule {}
