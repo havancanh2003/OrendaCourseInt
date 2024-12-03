@@ -28,7 +28,7 @@ export class LoginComponent {
       (res: any) => {
         if (res && res.access_token) {
           // Lưu access_token vào cookie
-          document.cookie = `access_token=${res.access_token}; max-age=300; path=/; secure; samesite=strict`;
+          document.cookie = `access_token=${res.access_token}; max-age=300000; path=/; secure; samesite=strict`;
 
           //this.isSucces.emit(true);
           this.router.navigate(['']);

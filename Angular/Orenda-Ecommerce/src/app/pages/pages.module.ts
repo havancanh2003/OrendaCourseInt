@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { FormAddressComponent } from './profile-page/form-address/form-address.component';
 import { PagesRoutingModule } from './pages-routing.module';
+import { ManageAddressModule } from './manage-address/manage-address.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PagesRoutingModule } from './pages-routing.module';
     FormsModule,
     PagesRoutingModule,
     ReactiveFormsModule,
+    ManageAddressModule,
   ],
   exports: [
     DashboardComponent,
