@@ -1,16 +1,8 @@
 <nav>
   <ul class="nav">
     <li class="nav-item">
-      <a
-        routerLink="/dashboard"
-        (click)="switchPage('dashboard')"
-        [class.active]="currenPage === 'dashboard'"
-        class="nav-link"
-        data-toggle="collapse"
-        href="#ui-basic"
-        aria-expanded="false"
-        aria-controls="ui-basic"
-      >
+      <a routerLink="/dashboard" (click)="switchPage('dashboard')" [class.active]="currenPage === 'dashboard'"
+        class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
@@ -129,23 +121,15 @@
       </div>
     </li> -->
     <li class="nav-item">
-      <a
-        routerLink="/product"
-        (click)="switchPage('product')"
-        [class.active]="currenPage === 'product'"
-        class="nav-link"
-      >
+      <a routerLink="/product" (click)="switchPage('product')" [class.active]="currenPage === 'product'"
+        class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Product-page</span>
       </a>
     </li>
     <li class="nav-item">
-      <a
-        href="javascript:void(0)"
-        (click)="switchPage('profile')"
-        [class.active]="currenPage === 'profile'"
-        class="nav-link"
-      >
+      <a routerLink="/profile" (click)="switchPage('profile')" [class.active]="currenPage === 'profile'"
+        class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Profile-page</span>
       </a>

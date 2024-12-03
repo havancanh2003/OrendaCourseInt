@@ -20,7 +20,7 @@ export interface UserUpdate {
   userId: string;
   email: string;
   name: string;
-  avatarDocumentId: string;
+  avatarDocumentId?: string;
   phoneNumber: string;
   ngaySinh: Date;
   gioiTinh: boolean;

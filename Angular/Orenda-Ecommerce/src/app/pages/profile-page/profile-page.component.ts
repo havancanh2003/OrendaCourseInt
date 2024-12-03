@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
-import { User, UserUpdate } from '../../core/models/user.model';
-import { concatenate, formatDate, isObjectEmpty } from '../../helpers/helpers';
+import { UserUpdate } from '../../core/models/user.model';
+import { concatenate, formatDateToYYYYMMDD } from '../../helpers/helpers';
+import { addressInfor } from '../../core/models/address.model';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-profile-page',
@@ -9,132 +15,131 @@ import { concatenate, formatDate, isObjectEmpty } from '../../helpers/helpers';
   styleUrl: './profile-page.component.scss',
 })
 export class ProfilePageComponent implements OnInit {
-  infoUser: User = {
-    id: '',
-    userName: '',
-    fullName: '',
-    birthDay: new Date(),
-    location: '',
-    email: '',
-    phoneNumber: '',
-    gender: false,
-    imgAvatar: '',
-    role: 'customer',
-    districtsId: '',
-    districtsName: '',
-    provincesId: '',
-    provincesName: '',
-    wardsId: '',
-    wardsName: '',
+  userForm!: UntypedFormGroup;
+  isPopupAddressVisible: boolean = false;
+  idInfoAddress: addressInfor = {
+    districtCode: '',
+    provinceCode: '',
+    wardCode: '',
   };
 
-  dateAsString: string = '';
+  constructor(private auth: AuthService, private fb: UntypedFormBuilder) {}
 
-  isPopupAddressVisible: boolean = false;
-  idInfoAdd: any;
-
-  constructor(private auth: AuthService) {}
   ngOnInit(): void {
+    this.initForm();
+    this.fetchUserInfo();
+  }
+
+  // validator form
+  initForm(): void {
+    this.userForm = this.fb.group({
+      id: [''],
+      userName: ['', [Validators.required]],
+      fullName: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: [
+        '',
+        [Validators.required, Validators.pattern('^\\d{10,12}$')],
+      ],
+      birthDay: [''],
+      location: [''],
+      gender: [''],
+      imgAvatar: [''],
+      provincesId: [''],
+      provincesName: [''],
+      districtsId: [''],
+      districtsName: [''],
+      wardsId: [''],
+      wardsName: [''],
+      role: [''],
+    });
+  }
+
+  // call data apply form
+  fetchUserInfo(): void {
     this.auth.getInfo().subscribe((res: any) => {
       if (res) {
         const data = res.userSession;
         if (data) {
           console.log(data);
-          this.infoUser = {
+          const location = concatenate(data.tenXa, data.tenHuyen, data.tenTinh);
+
+          this.userForm.patchValue({
             id: data.id,
-            userName: data.userName,
-            fullName: data.fullName,
-            birthDay: data.ngaySinh,
-            location: data.address,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
+            userName: data.userName?.trim(),
+            fullName: data.fullName?.trim(),
+            birthDay: formatDateToYYYYMMDD(data.ngaySinh),
+            location: location,
+            email: data.email?.trim(),
+            phoneNumber: data.phoneNumber?.trim(),
             gender: data.gioiTinh,
-            imgAvatar: '',
-            role: data.roleLevel ?? 'customer',
+            imgAvatar: data.imgAvatar,
+            role: data.role ?? 'customer',
             provincesId: data.maTinh,
             provincesName: data.tenTinh,
             districtsId: data.maHuyen,
             districtsName: data.tenHuyen,
             wardsId: data.maXa,
             wardsName: data.tenXa,
-          };
-          this.dateAsString = formatDate(new Date(this.infoUser.birthDay));
-          if (
-            data.maTinh != null &&
-            data.maHuyen != null &&
-            data.maXa != null
-          ) {
-            this.idInfoAdd = {
-              provinceId: data.maTinh.toString(),
-              districtId: data.maHuyen.toString(),
-              wardId: data.maXa.toString(),
-            };
-          }
+          });
         }
       }
     });
   }
 
-  onDateChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.value) {
-      this.infoUser.birthDay = new Date(input.value);
-    }
+  getFormData(): UserUpdate {
+    const data = { ...this.userForm.value };
+    const userUpdate: UserUpdate = {
+      userId: data.id,
+      email: data.email?.trim(),
+      name: data.fullName?.trim(),
+      phoneNumber: data.phoneNumber?.trim(),
+      ngaySinh: new Date(data.birthDay),
+      gioiTinh: data.gender,
+      diaChi: data.location,
+      maTinh: data.provincesId,
+      maHuyen: data.districtsId,
+      maXa: data.wardsId,
+    };
+    return userUpdate;
   }
 
   changeAddress() {
+    this.idInfoAddress = {
+      provinceCode: this.userForm.controls['provincesId'].value,
+      districtCode: this.userForm.controls['districtsId'].value,
+      wardCode: this.userForm.controls['wardsId'].value,
+    };
     this.isPopupAddressVisible = true;
   }
 
-  showChangedAddress(addressChanged: any) {
-    if (!isObjectEmpty(addressChanged)) {
-      this.infoUser.location = addressChanged.name;
-      this.infoUser.provincesId = addressChanged.code.selectedProvince;
-      this.infoUser.districtsId = addressChanged.code.selectedDistrict;
-      this.infoUser.wardsId = addressChanged.code.selectedWard;
+  showChangedAddress(addressChanged?: addressInfor) {
+    if (addressChanged != null || addressChanged != undefined) {
+      this.userForm.controls['provincesId'].setValue(
+        addressChanged.provinceCode
+      );
+      this.userForm.controls['districtsId'].setValue(
+        addressChanged.districtCode
+      );
+      this.userForm.controls['wardsId'].setValue(addressChanged.wardCode);
+
+      this.userForm.controls['location'].setValue(
+        addressChanged.fullAddress != undefined
+          ? addressChanged.fullAddress
+          : ''
+      );
     }
     this.isPopupAddressVisible = false;
   }
 
   onSubmitUpdateInfo() {
-    const userUpdate: UserUpdate = {
-      userId: this.infoUser.id,
-      email: this.infoUser.email,
-      name: '',
-      avatarDocumentId: '',
-      phoneNumber: this.infoUser.phoneNumber,
-      ngaySinh: this.infoUser.birthDay,
-      gioiTinh: this.infoUser.gender,
-      diaChi: '',
-      maTinh: this.infoUser.provincesId,
-      maHuyen: this.infoUser.districtsId,
-      maXa: this.infoUser.wardsId,
-    };
+    const userUpdate = this.getFormData();
+    // console.log(userUpdate);
+    // return;
     this.auth.updateUser(userUpdate).subscribe((res: any) => {
       if (res) {
         alert('Update thành công');
-        const data = res.userSession;
-        if (data) {
-          this.infoUser = {
-            id: data.id,
-            userName: data.userName,
-            fullName: data.fullName,
-            birthDay: data.ngaySinh,
-            location: data.address,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            gender: data.gioiTinh,
-            imgAvatar: '',
-            role: data.roleLevel ?? 'customer',
-            districtsId: data.maHuyen,
-            districtsName: '',
-            provincesId: data.maTinh,
-            provincesName: '',
-            wardsId: data.maXa,
-            wardsName: '',
-          };
-          this.dateAsString = formatDate(new Date(this.infoUser.birthDay));
-        }
+        window.location.reload();
       }
     });
   }

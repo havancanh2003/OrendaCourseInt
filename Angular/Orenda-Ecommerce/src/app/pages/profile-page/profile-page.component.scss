@@ -69,3 +69,11 @@
   z-index: 20;
   background-color: rgba(27, 22, 22, 0.3);
 }
+.is-invalid {
+  border-color: red;
+}
+
+.invalid-feedback {
+  color: red;
+  font-size: 0.875em;
+}

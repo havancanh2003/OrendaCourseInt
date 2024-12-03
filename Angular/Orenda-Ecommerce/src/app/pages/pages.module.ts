@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CoreModule } from '../core/core.module';
 import { LoginComponent } from './login/login.component';
-import { FormsModule, NgModel } from '@angular/forms';
-import { ProductModule } from './product/product.module';
+import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
+
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { FormAddressComponent } from './profile-page/form-address/form-address.component';
 import { PagesRoutingModule } from './pages-routing.module';
@@ -16,7 +16,13 @@ import { PagesRoutingModule } from './pages-routing.module';
     ProfilePageComponent,
     FormAddressComponent,
   ],
-  imports: [CommonModule, CoreModule, FormsModule, PagesRoutingModule],
+  imports: [
+    CommonModule,
+    CoreModule,
+    FormsModule,
+    PagesRoutingModule,
+    ReactiveFormsModule,
+  ],
   exports: [
     DashboardComponent,
     LoginComponent,

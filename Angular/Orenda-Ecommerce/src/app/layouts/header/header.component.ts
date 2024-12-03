@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { clearToken } from '../../helpers/helpers';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -8,12 +9,11 @@ import { clearToken } from '../../helpers/helpers';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  @Output() isLogOut = new EventEmitter<boolean>();
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
   submitLogout() {
     this.authService.logoutUser().subscribe(() => {
       clearToken();
-      this.isLogOut.emit(true);
+      this.router.navigate(['/login']);
     });
   }
 }

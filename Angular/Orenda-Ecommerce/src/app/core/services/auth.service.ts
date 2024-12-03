@@ -35,6 +35,7 @@ export class AuthService {
 
   updateUser(body: UserUpdate): Observable<any> {
     const url = `${this._BASEURL}/api/app/account/update-account-info`;
-    return this.http.post(url, body);
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(url, body, { headers });
   }
 }

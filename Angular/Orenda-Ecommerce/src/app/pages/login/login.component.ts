@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent {
   password = '';
   errorMessage = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   submitlogin(): void {
     const userName = this.username.trim();
@@ -29,7 +30,8 @@ export class LoginComponent {
           // Lưu access_token vào cookie
           document.cookie = `access_token=${res.access_token}; max-age=300; path=/; secure; samesite=strict`;
 
-          this.isSucces.emit(true);
+          //this.isSucces.emit(true);
+          this.router.navigate(['']);
           this.errorMessage = '';
         } else {
           this.errorMessage = 'Đăng nhập không thành công, vui lòng thử lại!';

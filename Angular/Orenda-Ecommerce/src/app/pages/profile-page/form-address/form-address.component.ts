@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressService } from '../../../core/services/address.service';
+import { addressInfor } from '../../../core/models/address.model';
 
 @Component({
   selector: 'app-form-address',
@@ -7,8 +8,12 @@ import { AddressService } from '../../../core/services/address.service';
   styleUrl: './form-address.component.scss',
 })
 export class FormAddressComponent implements OnInit {
-  @Input() currentAddress: any;
-  @Output() addressChange = new EventEmitter<{}>();
+  @Input() currentAddress: addressInfor = {
+    provinceCode: '',
+    districtCode: '',
+    wardCode: '',
+  };
+  @Output() addressChange = new EventEmitter<addressInfor>();
 
   TYPE_PROVINCE = 'province';
   TYPE_DISTRICT = 'district';
@@ -35,7 +40,7 @@ export class FormAddressComponent implements OnInit {
     this.addressService.getProvinces().subscribe((data) => {
       this.provinces = data;
       if (this.currentAddress) {
-        this.selectedProvince = this.currentAddress.provinceId;
+        this.selectedProvince = this.currentAddress.provinceCode;
         this.onProvinceChange();
       }
     });
@@ -47,7 +52,7 @@ export class FormAddressComponent implements OnInit {
       .subscribe((data) => {
         this.districts = data;
         if (this.currentAddress) {
-          this.selectedDistrict = this.currentAddress.districtId;
+          this.selectedDistrict = this.currentAddress.districtCode;
           this.onDistrictChange();
         }
       });
@@ -57,27 +62,25 @@ export class FormAddressComponent implements OnInit {
     this.addressService.getWards(this.selectedDistrict).subscribe((data) => {
       this.wards = data;
       if (this.currentAddress) {
-        this.selectedWard = this.currentAddress.wardId;
+        this.selectedWard = this.currentAddress.wardCode;
       }
     });
   }
 
   closeModal() {
-    this.addressChange.emit({});
+    this.addressChange.emit();
   }
   saveAddress() {
-    const addressChanged = {
-      code: {
-        selectedProvince: this.selectedProvince,
-        selectedDistrict: this.selectedDistrict,
-        selectedWard: this.selectedWard,
-      },
-      name:
+    const addressChanged: addressInfor = {
+      provinceCode: this.selectedProvince,
+      districtCode: this.selectedDistrict,
+      wardCode: this.selectedWard,
+      fullAddress:
+        this.getNameAddressByCode(this.selectedWard, this.TYPE_WARD) +
+        ' - ' +
         this.getNameAddressByCode(this.selectedProvince, this.TYPE_PROVINCE) +
         ' - ' +
-        this.getNameAddressByCode(this.selectedDistrict, this.TYPE_DISTRICT) +
-        ' - ' +
-        this.getNameAddressByCode(this.selectedWard, this.TYPE_WARD),
+        this.getNameAddressByCode(this.selectedDistrict, this.TYPE_DISTRICT),
     };
 
     this.addressChange.emit(addressChanged);

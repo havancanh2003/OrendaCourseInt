@@ -27,22 +27,28 @@
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
-                    <form (ngSubmit)="onSubmitUpdateInfo()">
+                    <form [formGroup]='userForm' (ngSubmit)="onSubmitUpdateInfo()">
                         <div class="mb-3">
                             <label class="small mb-1" for="inputUsername">Username</label>
-                            <input class="form-control" id="inputUsername" name="userName"
-                                [(ngModel)]="infoUser.userName" type="text" placeholder="Enter your username">
+                            <input readonly class="form-control" id="inputUsername" name="userName"
+                                formControlName="userName" type="text" placeholder="Enter your username">
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">First name</label>
-                                <input class="form-control" id="inputFirstName" type="text" name="firstName"
-                                    placeholder="Enter your first name" [(ngModel)]="infoUser.fullName">
+                                <label class="small mb-1">Full name</label>
+                                <input class="form-control" type="text" name="fullName"
+                                    placeholder="Enter your first name" formControlName="fullName"
+                                    [class.is-invalid]="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched">
+
+                                <div *ngIf="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched"
+                                    class="invalid-feedback">
+                                    Full name is required and must be at least 3 characters.
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputLastName">Gender</label>
                                 <select class="form-control" id="exampleSelectGender" name="gender"
-                                    [(ngModel)]="infoUser.gender">
+                                    formControlName="gender">
                                     <option [value]="1">
                                         Male
                                     </option>
@@ -57,35 +63,46 @@
                                 <label class="small mb-1" for="inputOrgName">Role level</label>
                                 <input class="form-control" id="inputOrgName" type="text"
                                     placeholder="Enter your organization name" name="role" readonly
-                                    [(ngModel)]="infoUser.role">
+                                    formControlName="role">
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputLocation">Location</label>
-                                <input readonly class="form-control" id="inputLocation" type="text" name="location"
-                                    placeholder="Enter your location" [(ngModel)]="infoUser.location">
-                                <i (click)="changeAddress()" class="fa-solid fa-house">changeAddress</i>
+                                <input (click)="changeAddress()" readonly class="form-control" id="inputLocation"
+                                    type="text" name="location" placeholder="Enter your location"
+                                    formControlName="location">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="small mb-1" for="inputEmailAddress">Email address</label>
                             <input class="form-control" id="inputEmailAddress" type="email" name="email"
-                                placeholder="Enter your email address" [(ngModel)]="infoUser.email">
+                                placeholder="Enter your email address" formControlName="email"
+                                [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+
+                            <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+                                class="invalid-feedback">
+                                Email is required and true format.
+                            </div>
                         </div>
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputPhone">Phone number</label>
                                 <input class="form-control" name="phoneNumber" type="tel"
-                                    placeholder="Enter your phone number" [(ngModel)]="infoUser.phoneNumber">
+                                    placeholder="Enter your phone number" formControlName="phoneNumber"
+                                    [class.is-invalid]="userForm.get('phoneNumber')?.invalid && userForm.get('phoneNumber')?.touched">
+
+                                <div *ngIf="userForm.get('phoneNumber')?.invalid && userForm.get('phoneNumber')?.touched"
+                                    class="invalid-feedback">
+                                    Phone number is required and true format.
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="small mb-1" for="inputBirthday">Birthday</label>
                                 <input class="form-control" id="inputBirthday" type="date" name="birthday"
-                                    (change)="onDateChange($event)" placeholder="Enter your birthday"
-                                    [(ngModel)]="dateAsString">
+                                    placeholder="Enter your birthday" formControlName="birthDay">
                             </div>
                         </div>
-                        <input hidden name="id" [(ngModel)]="infoUser.id">
-                        <button [disabled]="infoUser.id === '' ? true : null" class="btn btn-primary" type="submit">Save
+                        <input hidden name="id" formControlName="id">
+                        <button [disabled]="userForm.invalid" class="btn btn-primary" type="submit">Save
                             changes</button>
                     </form>
                 </div>
@@ -95,6 +112,6 @@
 </div>
 
 <div class="container-form-address" *ngIf="isPopupAddressVisible">
-    <app-form-address [currentAddress]="idInfoAdd" (addressChange)="showChangedAddress($event)"
+    <app-form-address [currentAddress]="idInfoAddress" (addressChange)="showChangedAddress($event)"
         class="w-50"></app-form-address>
 </div>

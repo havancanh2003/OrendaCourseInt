@@ -4,6 +4,14 @@ export function formatDate(date: Date): string {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+export function formatDateToYYYYMMDD(dateString: string): string {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 export function getCookie(name: any) {
   const nameEQ = name + '=';
   const ca = document.cookie.split(';');
@@ -18,29 +26,12 @@ export function clearToken(): void {
   document.cookie = 'access_token=; max-age=0; path=/';
 }
 export function concatenate(
-  provinceId: string,
-  districtId: string,
-  wardId: string
-): string {
-  return `${provinceId}-${districtId}-${wardId}`;
-}
-
-export function cutConcatenate(idAdd: string) {
-  const parts = idAdd.split('-');
-
-  if (parts.length !== 3) {
-    throw new Error(
-      'Chuỗi không hợp lệ. Cần có ba phần: provinceId-districtId-communeId'
-    );
+  wardName: string,
+  districtName: string,
+  provinceName: string
+): string | null {
+  if (wardName != null && districtName != null && provinceName != null) {
+    return `${wardName} - ${districtName} - ${provinceName}`;
   }
-
-  return {
-    provinceId: parts[0],
-    districtId: parts[1],
-    wardId: parts[2],
-  };
-}
-
-export function isObjectEmpty(obj: object): boolean {
-  return Object.keys(obj).length === 0;
+  return null;
 }
