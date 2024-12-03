@@ -1,53 +1,130 @@
 <div class="card">
-    <div class="card-body">
-        <h4 class="card-title">Basic Table</h4>
-        <p class="card-description">
-            Add class <code>.table</code>
-        </p>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Profile</th>
-                        <!-- <th>VatNo.</th>
-                        <th>Created</th>
-                        <th>Status</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let a of lAddress; let i = index" (dblclick)="selectedProvince(a)">
-                        <td>{{a | json}}</td>
-                        <!-- <td>53275531</td>
-                        <td>12 May 2017</td>
-                        <td><label class="badge badge-danger">Pending</label></td> -->
-                    </tr>
-                    <!-- </tr>
-                    <tr>
-                        <td>Messsy</td>
-                        <td>53275532</td>
-                        <td>15 May 2017</td>
-                        <td><label class="badge badge-warning">In progress</label></td>
-                    </tr>
-                    <tr>
-                        <td>John</td>
-                        <td>53275533</td>
-                        <td>14 May 2017</td>
-                        <td><label class="badge badge-info">Fixed</label></td>
-                    </tr>
-                    <tr>
-                        <td>Peter</td>
-                        <td>53275534</td>
-                        <td>16 May 2017</td>
-                        <td><label class="badge badge-success">Completed</label></td>
-                    </tr>
-                    <tr>
-                        <td>Dave</td>
-                        <td>53275535</td>
-                        <td>20 May 2017</td>
-                        <td><label class="badge badge-warning">In progress</label></td>
-                    </tr> -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+  <div class="card-body">
+    <h4 class="card-title">{{ lAddress.title }}</h4>
+    <!-- <p class="card-description">Add class <code>.table</code></p> -->
+    <ng-container *ngIf="list.length > 0">
+      <div class="table-responsive">
+        <ng-container *ngIf="lAddress.currentType === 'Province'">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Cap</th>
+                <th>Province Name</th>
+                <th>Province Code</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="lAddress && lAddress.items">
+                <tr
+                  *ngFor="let add of list; let i = index"
+                  (dblclick)="selectedAddress(add)"
+                >
+                  <td>{{ add.cap }}</td>
+                  <td>{{ add.provinceName }}</td>
+                  <td>{{ add.provinceCode }}</td>
+                  <td>{{ add.isActive }}</td>
+                  <td></td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+
+        <ng-container *ngIf="lAddress.currentType === 'District'">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Cap</th>
+                <th>District Name</th>
+                <th>District Code</th>
+                <th>Province Code</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="lAddress && lAddress.items">
+                <tr
+                  *ngFor="let add of list; let i = index"
+                  (dblclick)="selectedAddress(add)"
+                >
+                  <td>{{ add.cap }}</td>
+                  <td>{{ add.districtName }}</td>
+                  <td>{{ add.districtCode }}</td>
+                  <td>{{ add.provinceCode }}</td>
+                  <td>{{ add.isActive }}</td>
+                  <td></td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+
+        <ng-container *ngIf="lAddress.currentType === 'Ward'">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Cap</th>
+                <th>Ward Name</th>
+                <th>Ward Code</th>
+                <th>District Code</th>
+                <th>Province Code</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="lAddress && lAddress.items">
+                <tr
+                  *ngFor="let add of list; let i = index"
+                  (dblclick)="selectedAddress(add)"
+                >
+                  <td>{{ add.cap }}</td>
+                  <td>{{ add.wardName }}</td>
+                  <td>{{ add.wardCode }}</td>
+                  <td>{{ add.districtCode }}</td>
+                  <td>{{ add.provinceCode }}</td>
+                  <td>{{ add.isActive }}</td>
+                  <td></td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+    </ng-container>
+    <!-- <ng-container *ngIf="list.length > 0">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>{{ lAddress.currentType }} Name</th>
+              <th>{{ lAddress.currentType }} Code</th>
+              <th>Province Code</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="lAddress && lAddress.items">
+              <tr
+                *ngFor="let add of list; let i = index"
+                (dblclick)="selectedAddress(add)"
+              >
+                <td>{{ add.cap }}</td>
+                <td>{{ add[lAddress.currentType + "Name"] }}</td>
+                <td>{{ add[lAddress.currentType + "Code"] }}</td>
+                <td>{{ add.provinceCode }}</td>
+                <td>{{ add.isActive }}</td>
+                <td></td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </ng-container> -->
+  </div>
 </div>
