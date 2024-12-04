@@ -1,0 +1,131 @@
+<div class="card" *ngIf="model">
+    <!-- Form tỉnh thành phos  -->
+    <div class="card-body">
+        <form (ngSubmit)="submitForm(model)">
+            <ng-container *ngIf="isProvince(model)">
+                <h3>{{titleForm}}</h3>
+                <div class="forms-sample">
+                    <div class="form-group">
+                        <label for="cap">Province Level:</label>
+                        <input readonly class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                    </div>
+                    <div class="form-group">
+                        <label for="provinceName">Province Name:</label>
+                        <input class="form-control" id="provinceName" [(ngModel)]="model.provinceName"
+                            name="provinceName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="provinceCode">Province Code:</label>
+                        <input readonly class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                            name="provinceCode" />
+                    </div>
+                    <div class="form-group">
+                        <label for="isActive">Active:</label>
+                        <input style="margin-left: 10px;" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
+                            name="isActive" />
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- Form cho huyện -->
+            <ng-container *ngIf="isDistrict(model)">
+                <h3>{{titleForm}}</h3>
+                <div class="forms-sample">
+                    <div class="form-group">
+                        <label for="cap">District Level:</label>
+                        <input readonly class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                    </div>
+                    <div class="form-group">
+                        <label for="districtName">District Name:</label>
+                        <input class="form-control" id="districtName" [(ngModel)]="model.districtName"
+                            name="districtName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="districtCode">District Code:</label>
+                        <input readonly class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
+                            name="districtCode" />
+                    </div>
+                    <div class="form-group">
+                        <label for="provinceCode">Province Code:</label>
+                        <input readonly class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                            name="provinceCode" />
+                    </div>
+                    <div class="form-group">
+                        <label for="isActive">Active:</label>
+                        <input style="margin-left: 10px;" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
+                            name="isActive" />
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- Form xã phhuong -->
+            <ng-container *ngIf="isWard(model)">
+                <h3>{{titleForm}}</h3>
+                <div class="forms-sample">
+
+                    <div class="form-group">
+                        <label for="cap">Ward Level:</label>
+                        <input readonly class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                    </div>
+                    <div class="form-group">
+                        <label for="wardName">Ward Name:</label>
+                        <input class="form-control" id="wardName" [(ngModel)]="model.wardName" name="wardName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="wardCode">Ward Code:</label>
+                        <input readonly class="form-control" id="wardCode" [(ngModel)]="model.wardCode"
+                            name="wardCode" />
+                    </div>
+                    <div class="form-group">
+                        <label for="districtCode">District Code:</label>
+                        <input readonly class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
+                            name="districtCode" />
+                    </div>
+                    <div class="form-group">
+                        <label for="provinceCode">Province Code:</label>
+                        <input readonly class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                            name="provinceCode" />
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <div class="form-group">
+                            <label for="isActive">Active:</label>
+                            <input style="margin-left: 10px;" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
+                                name="isActive" />
+                        </div>
+                        <ng-container *ngIf="model.isXaNgheo !== undefined">
+                            <div class="form-group">
+                                <label for="isXaNgheo">Is Poor Commune:</label>
+                                <input style="margin-left: 10px;" type="checkbox" id="isXaNgheo"
+                                    [(ngModel)]="model.isXaNgheo" name="isXaNgheo" />
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="model.isXaMienNui !== undefined">
+                            <div class="form-group">
+                                <label for="isXaMienNui">Is Mountainous Commune:</label>
+                                <input style="margin-left: 10px;" type="checkbox" id="isXaMienNui"
+                                    [(ngModel)]="model.isXaMienNui" name="isXaMienNui" />
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="model.isXaDanToc !== undefined">
+                            <div class="form-group">
+                                <label for="isXaDanToc">Is Ethnic Commune:</label>
+                                <input style="margin-left: 10px;" type="checkbox" id="isXaDanToc"
+                                    [(ngModel)]="model.isXaDanToc" name="isXaDanToc" />
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="model.isThanhThi !== undefined">
+                            <div class="form-group">
+                                <label for="isThanhThi">Is Urban Commune:</label>
+                                <input style="margin-left: 10px;" type="checkbox" id="isThanhThi"
+                                    [(ngModel)]="model.isThanhThi" name="isThanhThi" />
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+            <button class="btn btn-primary mr-2" type="submit">Submit</button>
+            <button class="btn btn-light" type="button" (click)="cancelForm()">Cancel</button>
+        </form>
+    </div>
+</div>

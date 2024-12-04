@@ -22,7 +22,7 @@ export enum AddressType {
 }
 export interface addModel {
   cap: string;
-  id: number;
+  id: number | null;
   isActive: boolean;
 }
 
@@ -42,3 +42,19 @@ export interface wardModel extends addModel {
   wardName: string;
 }
 export interface provinceDetailModel extends provinceModel {}
+export interface districtDetailModel extends districtModel {}
+export interface wardDetailModel extends wardModel {
+  isXaNgheo: false;
+  isXaMienNui: false;
+  isXaDanToc: false;
+  isThanhThi: false;
+}
+
+export interface resultAddressModel {
+  dataResult: {};
+  returnValueAddition: null;
+  isSuccessful: boolean;
+  errorCode: string;
+  errorMessage: string;
+  dataError: any;
+}
