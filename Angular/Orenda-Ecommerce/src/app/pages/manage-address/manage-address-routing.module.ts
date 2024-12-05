@@ -1,16 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ManageAddressComponent } from './manage-address/manage-address.component';
+import { ProvinceComponent } from './province/province.component';
+import { WardComponent } from './ward/ward.component';
+import { DistrictComponent } from './district/district.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ManageAddressComponent,
+    redirectTo: 'tỉnh',
+    pathMatch: 'full',
   },
-  // {
-  //   path: ':provinceCode',
-  //   component: ManageAddressComponent,
-  // },
+  {
+    path: 'tỉnh',
+    component: ProvinceComponent,
+  },
+  {
+    path: 'huyện-thành-phố',
+    component: DistrictComponent,
+  },
+  {
+    path: 'xã-phường',
+    component: WardComponent,
+  },
 ];
 
 @NgModule({

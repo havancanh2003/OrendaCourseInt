@@ -35,3 +35,8 @@ export function concatenate(
   }
   return null;
 }
+
+export enum TYPE_ACTION {
+  CREATE = 'create',
+  UPDATE = 'update',
+}

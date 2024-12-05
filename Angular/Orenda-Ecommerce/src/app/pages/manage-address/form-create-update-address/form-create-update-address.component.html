@@ -3,27 +3,63 @@
     <div class="card-body">
         <form (ngSubmit)="submitForm(model)">
             <ng-container *ngIf="isProvince(model)">
-                <h3>{{titleForm}}</h3>
+                <h4>{{titleForm}}</h4>
                 <div class="forms-sample">
-                    <div class="form-group">
-                        <label for="cap">Province Level:</label>
-                        <input readonly class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                    <div class="row">
+                        <div class=" col-6 form-group">
+                            <label for="cap">Province Level:</label>
+                            <input class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                        </div>
+                        <div class=" col-6 form-group">
+                            <label for="provinceCode">Province Code:</label>
+                            <input class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                                name="provinceCode" />
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="provinceName">Province Name:</label>
                         <input class="form-control" id="provinceName" [(ngModel)]="model.provinceName"
                             name="provinceName" />
                     </div>
-                    <div class="form-group">
-                        <label for="provinceCode">Province Code:</label>
-                        <input readonly class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
-                            name="provinceCode" />
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="strVungSinhThai">Str Vùng Sinh Thái:</label>
+                            <input class="form-control" id="strVungSinhThai" [(ngModel)]="model.strVungSinhThai"
+                                name="strVungSinhThai" />
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="strVungDiaLy">Str Vùng Địa Lý:</label>
+                            <input class="form-control" id="strVungDiaLy" [(ngModel)]="model.strVungDiaLy"
+                                name="strVungDiaLy" />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="isActive">Active:</label>
-                        <input style="margin-left: 10px;" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
-                            name="isActive" />
+                    <div class="row">
+                        <div class=" col-6 form-group">
+                            <label for="strVungMien">Str Vùng Miền:</label>
+                            <input class="form-control" id="strVungMien" [(ngModel)]="model.strVungMien"
+                                name="strVungMien" />
+                        </div>
+                        <div class=" col-6 form-group">
+                            <label for="vungMien">Vùng Miền:</label>
+                            <input class="form-control" id="vungMien" [(ngModel)]="model.vungMien" name="vungMien" />
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class=" col-6 form-group">
+                            <label for="vungDiaLy">Vùng Địa Lý:</label>
+                            <input class="form-control" id="vungDiaLy" [(ngModel)]="model.vungDiaLy" name="vungDiaLy" />
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="vungSinhThai">Vùng Sinh Thái:</label>
+                            <input class="form-control" id="vungSinhThai" [(ngModel)]="model.vungSinhThai"
+                                name="vungSinhThai" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="isActive">Trạng thái:</label>
+                    <input class="mx-2 mt-1" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
+                        name="isActive" />
                 </div>
             </ng-container>
 
@@ -65,7 +101,7 @@
 
                     <div class="form-group">
                         <label for="cap">Ward Level:</label>
-                        <input readonly class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                        <input class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
                     </div>
                     <div class="form-group">
                         <label for="wardName">Ward Name:</label>
@@ -73,50 +109,49 @@
                     </div>
                     <div class="form-group">
                         <label for="wardCode">Ward Code:</label>
-                        <input readonly class="form-control" id="wardCode" [(ngModel)]="model.wardCode"
-                            name="wardCode" />
+                        <input class="form-control" id="wardCode" [(ngModel)]="model.wardCode" name="wardCode" />
                     </div>
                     <div class="form-group">
                         <label for="districtCode">District Code:</label>
-                        <input readonly class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
+                        <input class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
                             name="districtCode" />
                     </div>
                     <div class="form-group">
                         <label for="provinceCode">Province Code:</label>
-                        <input readonly class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                        <input class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
                             name="provinceCode" />
                     </div>
 
                     <div class="d-flex justify-content-between">
                         <div class="form-group">
-                            <label for="isActive">Active:</label>
+                            <label for="isActive">Trại thái:</label>
                             <input style="margin-left: 10px;" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
                                 name="isActive" />
                         </div>
                         <ng-container *ngIf="model.isXaNgheo !== undefined">
                             <div class="form-group">
-                                <label for="isXaNgheo">Is Poor Commune:</label>
+                                <label for="isXaNgheo">Xã nghèo:</label>
                                 <input style="margin-left: 10px;" type="checkbox" id="isXaNgheo"
                                     [(ngModel)]="model.isXaNgheo" name="isXaNgheo" />
                             </div>
                         </ng-container>
                         <ng-container *ngIf="model.isXaMienNui !== undefined">
                             <div class="form-group">
-                                <label for="isXaMienNui">Is Mountainous Commune:</label>
+                                <label for="isXaMienNui">Xã miền núi:</label>
                                 <input style="margin-left: 10px;" type="checkbox" id="isXaMienNui"
                                     [(ngModel)]="model.isXaMienNui" name="isXaMienNui" />
                             </div>
                         </ng-container>
                         <ng-container *ngIf="model.isXaDanToc !== undefined">
                             <div class="form-group">
-                                <label for="isXaDanToc">Is Ethnic Commune:</label>
+                                <label for="isXaDanToc">Xã dân tộc:</label>
                                 <input style="margin-left: 10px;" type="checkbox" id="isXaDanToc"
                                     [(ngModel)]="model.isXaDanToc" name="isXaDanToc" />
                             </div>
                         </ng-container>
                         <ng-container *ngIf="model.isThanhThi !== undefined">
                             <div class="form-group">
-                                <label for="isThanhThi">Is Urban Commune:</label>
+                                <label for="isThanhThi">Xã thành thị</label>
                                 <input style="margin-left: 10px;" type="checkbox" id="isThanhThi"
                                     [(ngModel)]="model.isThanhThi" name="isThanhThi" />
                             </div>

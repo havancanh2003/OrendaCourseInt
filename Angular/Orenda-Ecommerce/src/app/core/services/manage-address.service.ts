@@ -15,41 +15,77 @@ export class ManageAddressService {
   _BASEURL: string = 'http://test.nghiencuukhoahoc.com.vn';
   constructor(private http: HttpClient) {}
 
-  getListProvinces(): Observable<any> {
+  getListProvinces(
+    status?: boolean,
+    pageActive?: number,
+    textSearch?: string
+  ): Observable<any> {
+    const url = `${this._BASEURL}/api/master-data/tinh/get-list`;
+    const limit = 10;
+    const body = {
+      filter: textSearch ? textSearch.trim() : null,
+      isActive: status,
+      skipCount: pageActive && pageActive > 0 ? (pageActive - 1) * limit : 0,
+      maxResultCount: limit,
+    };
+    return this.http.post(url, body);
+  }
+  getAllProvinces(): Observable<any> {
     const url = `${this._BASEURL}/api/master-data/tinh/get-list`;
     const body = {
       filter: null,
       isActive: null,
       skipCount: 0,
-      maxResultCount: 10,
+      maxResultCount: 1000,
     };
     return this.http.post(url, body);
   }
 
-  getListDistricts(paramProvinceCode: string): Observable<any> {
+  getListDistrictsByProvinceCode(paramProvinceCode: string): Observable<any> {
     const body = {
       filter: null,
       isActive: null,
       skipCount: 0,
       maTinh: paramProvinceCode,
-      maxResultCount: 10,
+      maxResultCount: 1000,
+    };
+    const url = `${this._BASEURL}/api/master-data/huyen/get-list`;
+    return this.http.post(url, body);
+  }
+  getDataDistrictsFilter(
+    status?: boolean,
+    pageActive?: number,
+    textSearch?: string,
+    paramProvinceCode?: string
+  ): Observable<any> {
+    const limit = 10;
+    const body = {
+      filter: textSearch,
+      isActive: status,
+      skipCount: pageActive && pageActive > 0 ? (pageActive - 1) * limit : 0,
+      maTinh: paramProvinceCode,
+      maxResultCount: limit,
     };
     const url = `${this._BASEURL}/api/master-data/huyen/get-list`;
     return this.http.post(url, body);
   }
 
   getListWards(
-    paramProvinceCode: string,
-    paramDistrictCode: string
+    status?: boolean,
+    pageActive?: number,
+    txtSearch?: string,
+    paramProvinceCode?: string,
+    paramDistrictCode?: string
   ): Observable<any> {
     const url = `${this._BASEURL}/api/master-data/xa/get-list`;
+    const limit = 10;
     const body = {
-      filter: null,
-      isActive: null,
-      skipCount: 0,
+      filter: txtSearch,
+      isActive: status,
+      skipCount: pageActive && pageActive > 0 ? (pageActive - 1) * limit : 0,
       maTinh: paramProvinceCode,
       maHuyen: paramDistrictCode,
-      maxResultCount: 10,
+      maxResultCount: limit,
     };
     return this.http.post(url, body);
   }

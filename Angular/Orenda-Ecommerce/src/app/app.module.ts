@@ -8,6 +8,7 @@ import { authInterceptorsInterceptor } from './core/services/auth-interceptors.i
 import { loadingInterceptorsInterceptor } from './shared/loading/loading-interceptors.interceptor';
 import { PagesModule } from './pages/pages.module';
 import { LayoutsModule } from './layouts/layouts.module';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import { LayoutsModule } from './layouts/layouts.module';
     SharedModule,
     PagesModule,
     HttpClientModule,
+    NgxPaginationModule,
   ],
   providers: [
     {

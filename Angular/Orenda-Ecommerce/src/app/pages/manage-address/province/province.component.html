@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="card-body">
+        <div>
+            <h4 style="margin-bottom: .8rem;" class="card-title">Bộ lọc tìm kiếm</h4>
+        </div>
+        <div class="w-100 d-flex justify-content-between">
+            <!-- <div class="">
+                <select style="color: black;" class="form-control" [(ngModel)]="itemSelectedStatus"
+                    (change)="selectedStatus()">
+                    <option [value]="true">Hoạt động</option>
+                    <option [value]="false">Ngưng hoạt động</option>
+                </select>
+            </div> -->
+            <div class="w-25">
+                <input class="form-control" id="textSearch" name="textSearch" [(ngModel)]="textSearch" type="text"
+                    (keyup.enter)="searchProvinces()" placeholder="Enter province name or code">
+            </div>
+            <button (click)="updateOrCreateAddress()" style=" height: fit-content;" type="button"
+                class="btn btn-primary mr-2">Create</button>
+        </div>
+    </div>
+</div>
+<div class="card mt-2">
+    <div class="card-body">
+        <div class="w-100 d-flex justify-content-between">
+            <div class="w-100 d-flex">
+                <div>
+                    <h4 style="margin-bottom: .8rem;" class="card-title">Danh sách các tỉnh và thành phố</h4>
+                    <p class="card-description">
+                        Basic form layout
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <ng-container *ngIf="provinces && provinces.length > 0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Province Name</th>
+                            <th>Province Code</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let add of provinces| paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
+                            <td>{{ add.cap }}</td>
+                            <td>{{ add.provinceName }}</td>
+                            <td>{{ add.provinceCode }}</td>
+                            <td>{{ add.isActive }}</td>
+                            <td>
+                                <button (click)="updateOrCreateAddress(add)" style="margin-right: 10px;" type="button"
+                                    class="btn btn-primary">Update</button>
+                                <button (click)='deleteAddress(add.id)' type="button"
+                                    class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination-controls (pageChange)="onPageChange($event)" [autoHide]="true"></pagination-controls>
+            </ng-container>
+        </div>
+    </div>
+</div>
+<div class="container-form-overlay" *ngIf="isShowOrHiddenForm">
+    <app-form-create-update-address class="w-50" #child [model]="currentModel" [typeActiveChild]="typeAction"
+        (isActionForm)="listenStatusForm($event)"></app-form-create-update-address>
+</div>

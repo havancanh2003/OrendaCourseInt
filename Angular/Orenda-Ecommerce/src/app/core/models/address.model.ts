@@ -1,7 +1,3 @@
-export interface addressDetail {
-  code: string;
-  name: string;
-}
 export interface addressInfor {
   provinceCode: string;
   districtCode: string;
@@ -41,13 +37,20 @@ export interface wardModel extends addModel {
   wardCode: string;
   wardName: string;
 }
-export interface provinceDetailModel extends provinceModel {}
+export interface provinceDetailModel extends provinceModel {
+  strVungSinhThai: string | null;
+  strVungDiaLy: string | null;
+  strVungMien: string | null;
+  vungMien: string | null;
+  vungDiaLy: string | null;
+  vungSinhThai: string | null;
+}
 export interface districtDetailModel extends districtModel {}
 export interface wardDetailModel extends wardModel {
-  isXaNgheo: false;
-  isXaMienNui: false;
-  isXaDanToc: false;
-  isThanhThi: false;
+  isXaNgheo: boolean | null;
+  isXaMienNui: boolean | null;
+  isXaDanToc: boolean | null;
+  isThanhThi: boolean | null;
 }
 
 export interface resultAddressModel {

@@ -15,6 +15,7 @@ import {
 } from '../../../core/models/address.model';
 import { ManageAddressService } from '../../../core/services/manage-address.service';
 import { Observable } from 'rxjs';
+import { TYPE_ACTION } from '../../../helpers/helpers';
 
 @Component({
   selector: 'app-form-create-update-address',
@@ -23,6 +24,7 @@ import { Observable } from 'rxjs';
 })
 export class FormCreateUpdateAddressComponent implements OnInit, OnChanges {
   @Input() model!: provinceDetailModel | districtDetailModel | wardDetailModel;
+  @Input() typeActiveChild!: string;
   titleForm: string = '';
   @Output() isActionForm = new EventEmitter<boolean>();
 
@@ -32,13 +34,26 @@ export class FormCreateUpdateAddressComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['model']) {
-      if (this.isProvince(this.model)) {
-        this.titleForm = `Cập nhật thông tin tỉnh: ${this.model.provinceName}`;
-      } else if (this.isDistrict(this.model)) {
-        this.titleForm = `Cập nhật thông tin huyện: ${this.model.districtName}`;
-      } else if (this.isWard(this.model)) {
-        this.titleForm = `Cập nhật thông tin xã: ${this.model.wardName}`;
-      }
+      this.updateTitleForm();
+    }
+  }
+
+  private updateTitleForm(): void {
+    if (this.isProvince(this.model)) {
+      this.titleForm =
+        this.typeActiveChild == TYPE_ACTION.UPDATE
+          ? `Cập nhật thông tin tỉnh: ${this.model.provinceName}`
+          : `Tạo mới thông tin tỉnh`;
+    } else if (this.isDistrict(this.model)) {
+      this.titleForm =
+        this.typeActiveChild == TYPE_ACTION.UPDATE
+          ? `Cập nhật thông tin huyện(thành phố): ${this.model.districtName}`
+          : `Tạo mới thông tin huyện(thành phố)`;
+    } else if (this.isWard(this.model)) {
+      this.titleForm =
+        this.typeActiveChild == TYPE_ACTION.UPDATE
+          ? `Cập nhật thông tin xã phường thị trấn: ${this.model.wardName}`
+          : `Tạo mới thông tin xã phường thị trấn`;
     }
   }
 
@@ -56,6 +71,7 @@ export class FormCreateUpdateAddressComponent implements OnInit, OnChanges {
   submitForm(
     model: provinceDetailModel | districtDetailModel | wardDetailModel
   ) {
+    console.log(model);
     let updateObservable: Observable<resultAddressModel>;
 
     if (this.isProvince(model)) {
@@ -74,21 +90,18 @@ export class FormCreateUpdateAddressComponent implements OnInit, OnChanges {
     updateObservable.subscribe({
       next: (res: resultAddressModel) => {
         if (res.isSuccessful) {
-          alert(`${this.titleForm} thành công!`);
+          alert('Successfully !!');
           this.isActionForm.emit(true);
         } else {
-          alert('Cập nhật thất bại: ' + res.errorMessage);
-          this.isActionForm.emit(false);
+          alert('Failed: ' + res.errorMessage);
         }
       },
       error: (error) => {
         console.error('Error:', error);
-        alert('Đã xảy ra lỗi khi cập nhật!');
+        alert('Đã xảy ra lỗi khi thao tác!');
         this.isActionForm.emit(false);
       },
-      complete: () => {
-        console.log('Update completed');
-      },
+      complete: () => {},
     });
   }
 

@@ -112,7 +112,6 @@ export class LayoutsComponent implements OnInit {
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
     if (!this.horizontalMenu) {
-      console.log(1);
       return; // Thêm kiểm tra để tránh null
     }
     if (window.matchMedia('(min-width: 992px)').matches) {

@@ -123,9 +123,22 @@
     <li class="nav-item">
       <a routerLink="/manage-address" class="nav-link">
         <i class="icon-paper menu-icon"></i>
-        <span class="menu-title">Manage-address</span>
+        <span class="menu-title">Quản lý tỉnh</span>
       </a>
     </li>
+    <li class="nav-item">
+      <a routerLink="/manage-address/huyện-thành-phố" class="nav-link">
+        <i class="icon-paper menu-icon"></i>
+        <span class="menu-title">Quản lý huyện</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/manage-address/xã-phường" class="nav-link">
+        <i class="icon-paper menu-icon"></i>
+        <span class="menu-title">Quản lý xã</span>
+      </a>
+    </li>
+
     <li class="nav-item">
       <a routerLink="/product" (click)="switchPage('product')" [class.active]="currenPage === 'product'"
         class="nav-link">
