@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { getCookie } from './helpers/helpers';
+import { StateLoadingService } from './shared/loading/state-loading.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,12 @@ import { getCookie } from './helpers/helpers';
 })
 export class AppComponent {
   title = 'Orenda-Ecommerce';
-  constructor(private router: Router) {
+  isLoading: boolean = false;
+  constructor(
+    private router: Router,
+    private loadingService: StateLoadingService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         if (!this.isAuthenticated() && event.url !== '/login') {
@@ -17,6 +23,14 @@ export class AppComponent {
         }
       }
     });
+
+    this.loadingService.loading$.subscribe((loading) => {
+      this.isLoading = loading;
+    });
+  }
+
+  ngAfterContentChecked() {
+    this.cdr.detectChanges();
   }
 
   isAuthenticated(): boolean {

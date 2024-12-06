@@ -5,9 +5,11 @@
         </div>
         <div class="row w-100 d-flex justify-content-between">
             <div class="col">
-                <select style="color: black;" class="form-control" [(ngModel)]="itemProvinceCode"
-                    (change)="selectedItemProvinceCode()">
-                    <option *ngFor="let p of listitemProvinceCode" [value]="p.pCode">{{ p.pName}}</option>
+                <select style="color: black;" class="form-control" [(ngModel)]="itemSelectedStatus"
+                    (change)="selectedStatus()">
+                    <option [ngValue]="undefined">Trạng thái</option>
+                    <option [ngValue]="true">Hoạt động</option>
+                    <option [ngValue]="false">Ngưng hoạt động</option>
                 </select>
             </div>
             <div class="col">
@@ -21,7 +23,7 @@
                     (keyup.enter)="searchNameCodeDistrict()" placeholder="Enter province name or code">
             </div>
             <button (click)="updateOrCreateAddress()" style=" height: fit-content;" type="button"
-                class="btn btn-primary mr-2">Create</button>
+                class="btn btn-primary">Create</button>
         </div>
     </div>
 </div>
@@ -35,7 +37,7 @@
             </div>
         </div>
         <div class="table-responsive">
-            <ng-container *ngIf="districts && districts.length > 0">
+            <ng-container *ngIf="districts && districts.length > 0; else noData">
                 <table class="table">
                     <thead>
                         <tr>
@@ -54,18 +56,34 @@
                             <td>{{ add.districtName }}</td>
                             <td>{{ add.districtCode }}</td>
                             <td>{{ add.provinceCode }}</td>
-                            <td>{{ add.isActive }}</td>
+                            <td>
+                                <ng-container *ngIf="add.isActive; else noActive">
+                                    <label class="badge badge-success">Hoạt động</label>
+                                </ng-container>
+                                <ng-template #noActive>
+                                    <label class="badge badge-warning">Ngưng hoạt động</label>
+                                </ng-template>
+                            </td>
                             <td>
                                 <button (click)="updateOrCreateAddress(add)" style="margin-right: 10px;" type="button"
-                                    class="btn btn-primary">Update</button>
+                                    class="btn btn-outline-primary btn-fw">Update</button>
                                 <button (click)='deleteAddress(add.id)' type="button"
-                                    class="btn btn-danger">Delete</button>
+                                    class="btn btn-outline-danger btn-fw">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <pagination-controls (pageChange)="onPageChange($event)" [autoHide]="true"></pagination-controls>
+                <pagination-controls class="custom-pagination" previousLabel="Pre" nextLabel="Next"
+                    (pageChange)="onPageChange($event)" [autoHide]="true"></pagination-controls>
             </ng-container>
+
+            <ng-template #noData>
+                <h4 class="card-title text-danger">No data result</h4>
+            </ng-template>
         </div>
     </div>
+</div>
+<div class="container-form-overlay" *ngIf="isShowOrHiddenForm">
+    <app-form-create-update-address class="w-50" #child [model]="currentModel" [typeActiveChild]="typeAction"
+        (isActionForm)="listenStatusForm($event)"></app-form-create-update-address>
 </div>

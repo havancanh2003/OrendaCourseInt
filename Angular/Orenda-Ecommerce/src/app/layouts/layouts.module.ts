@@ -5,7 +5,6 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarSkinsComponent } from './sidebar-skins/sidebar-skins.component';
-import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
@@ -16,7 +15,7 @@ import { RouterModule } from '@angular/router';
     SidebarComponent,
     SidebarSkinsComponent,
   ],
-  imports: [CommonModule, SharedModule, RouterModule],
+  imports: [CommonModule, RouterModule],
   exports: [LayoutsComponent],
 })
 export class LayoutsModule {}

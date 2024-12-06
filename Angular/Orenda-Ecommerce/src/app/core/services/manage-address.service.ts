@@ -80,7 +80,7 @@ export class ManageAddressService {
     const url = `${this._BASEURL}/api/master-data/xa/get-list`;
     const limit = 10;
     const body = {
-      filter: txtSearch,
+      filter: txtSearch ? txtSearch.trim() : null,
       isActive: status,
       skipCount: pageActive && pageActive > 0 ? (pageActive - 1) * limit : 0,
       maTinh: paramProvinceCode,

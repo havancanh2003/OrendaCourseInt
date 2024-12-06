@@ -19,18 +19,5 @@ export class loadingInterceptorsInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     this.loadingService.show();
     return next.handle(req).pipe(finalize(() => this.loadingService.hide()));
-    // return next.handle(req).pipe(
-    //   tap(
-    //     // Khi yêu cầu thành công
-    //     () => {},
-    //     // Khi yêu cầu gặp lỗi
-    //     () => {},
-    //     // Khi yêu cầu hoàn tất (dù thành công hay thất bại)
-    //     () => {
-    //       // Ẩn loading
-    //       this.loadingService.hide();
-    //     }
-    //   )
-    // );
   }
 }

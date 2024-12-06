@@ -12,3 +12,33 @@
   z-index: 20;
   background-color: rgba(27, 22, 22, 0.3);
 }
+.custom-pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+.custom-pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+.custom-pagination::ng-deep .ngx-pagination .current {
+  background: #4b49ac !important;
+}
+.custom-pagination::ng-deep .ngx-pagination li {
+  margin-right: 0px;
+}
+
+.custom-pagination::ng-deep .ngx-pagination a::after {
+  display: none;
+}
+
+.custom-pagination::ng-deep .ngx-pagination li::before {
+  display: none;
+}
+
+.custom-pagination::ng-deep .ngx-pagination li::after {
+  display: none;
+}
+
+.custom-pagination::ng-deep .ngx-pagination a::before {
+  display: none;
+}

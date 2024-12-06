@@ -14,7 +14,7 @@ export class ProvinceComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalItems: number = 0;
-  itemSelectedStatus!: boolean;
+  itemSelectedStatus: boolean | undefined;
   textSearch!: string;
   isShowOrHiddenForm: boolean = false;
   currentModel!: provinceDetailModel;
@@ -25,7 +25,6 @@ export class ProvinceComponent implements OnInit {
   constructor(private manageAddressService: ManageAddressService) {}
 
   ngOnInit(): void {
-    this.itemSelectedStatus = true;
     this.getDataProvince();
   }
 
@@ -38,7 +37,6 @@ export class ProvinceComponent implements OnInit {
       .getListProvinces(status, pageActive, txtSearch)
       .subscribe({
         next: (res: { items: any[]; totalCount: number }) => {
-          console.log(res);
           if (res && res.items) {
             this.provinces = res.items.map((p: any) => ({
               provinceCode: p.maTinh,
@@ -112,21 +110,20 @@ export class ProvinceComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.currentPage = page;
+    this.loadData();
+  }
+
+  listenStatusForm(value: boolean): void {
+    if (value) {
+      this.loadData();
+    }
+    this.isShowOrHiddenForm = false;
+  }
+  loadData(): void {
     this.getDataProvince(
       this.itemSelectedStatus,
       this.currentPage,
       this.textSearch
     );
-  }
-
-  listenStatusForm(value: boolean): void {
-    if (value) {
-      this.getDataProvince(
-        this.itemSelectedStatus,
-        this.currentPage,
-        this.textSearch
-      );
-    }
-    this.isShowOrHiddenForm = false;
   }
 }

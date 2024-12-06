@@ -12,8 +12,8 @@
                         </div>
                         <div class=" col-6 form-group">
                             <label for="provinceCode">Province Code:</label>
-                            <input class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
-                                name="provinceCode" />
+                            <input [readonly]="isReadonly" class="form-control" id="provinceCode"
+                                [(ngModel)]="model.provinceCode" name="provinceCode" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -69,7 +69,7 @@
                 <div class="forms-sample">
                     <div class="form-group">
                         <label for="cap">District Level:</label>
-                        <input readonly class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
+                        <input class="form-control" id="cap" [(ngModel)]="model.cap" name="cap" />
                     </div>
                     <div class="form-group">
                         <label for="districtName">District Name:</label>
@@ -78,13 +78,20 @@
                     </div>
                     <div class="form-group">
                         <label for="districtCode">District Code:</label>
-                        <input readonly class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
-                            name="districtCode" />
+                        <input [readonly]="isReadonly" class="form-control" id="districtCode"
+                            [(ngModel)]="model.districtCode" name="districtCode" />
                     </div>
+                    <!-- <div class="form-group">
+                        <label for="provinceCode">Province Code:</label>
+                        <input [readonly]="isReadonly" class="form-control" id="provinceCode"
+                            [(ngModel)]="model.provinceCode" name="provinceCode" />
+                    </div> -->
                     <div class="form-group">
                         <label for="provinceCode">Province Code:</label>
-                        <input readonly class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
-                            name="provinceCode" />
+                        <select class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                            name="provinceCode" (change)="selectedItemProvinceCode('true')">
+                            <option *ngFor="let p of listitemProvinceCode" [value]="p.pCode">{{ p.pName }}</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="isActive">Active:</label>
@@ -109,22 +116,28 @@
                     </div>
                     <div class="form-group">
                         <label for="wardCode">Ward Code:</label>
-                        <input class="form-control" id="wardCode" [(ngModel)]="model.wardCode" name="wardCode" />
-                    </div>
-                    <div class="form-group">
-                        <label for="districtCode">District Code:</label>
-                        <input class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
-                            name="districtCode" />
-                    </div>
-                    <div class="form-group">
-                        <label for="provinceCode">Province Code:</label>
-                        <input class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
-                            name="provinceCode" />
+                        <input [readonly]="isReadonly" class="form-control" id="wardCode" [(ngModel)]="model.wardCode"
+                            name="wardCode" />
                     </div>
 
+                    <div class="form-group">
+                        <label for="provinceCode">Province Code:</label>
+                        <select class="form-control" id="provinceCode" [(ngModel)]="model.provinceCode"
+                            name="provinceCode" (change)="selectedItemProvinceCode('true')">
+                            <option *ngFor="let p of listitemProvinceCode" [value]="p.pCode">{{ p.pName }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="districtCode">District Code:</label>
+                        <select class="form-control" id="districtCode" [(ngModel)]="model.districtCode"
+                            name="districtCode" (change)="selectedItemDistrictCode()">
+                            <option *ngFor="let d of listitemDistrictCode" [value]="d.dCode">{{ d.dName }}</option>
+                        </select>
+                    </div>
                     <div class="d-flex justify-content-between">
                         <div class="form-group">
-                            <label for="isActive">Trại thái:</label>
+                            <label for="isActive">Trạng thái:</label>
                             <input style="margin-left: 10px;" type="checkbox" id="isActive" [(ngModel)]="model.isActive"
                                 name="isActive" />
                         </div>

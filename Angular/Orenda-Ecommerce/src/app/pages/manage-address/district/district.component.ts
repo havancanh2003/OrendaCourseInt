@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageAddressService } from '../../../core/services/manage-address.service';
 import { districtDetailModel } from '../../../core/models/address.model';
+import { TYPE_ACTION } from '../../../helpers/helpers';
 
 @Component({
   selector: 'app-district',
@@ -9,12 +10,17 @@ import { districtDetailModel } from '../../../core/models/address.model';
 })
 export class DistrictComponent implements OnInit {
   districts: districtDetailModel[] = [];
+  itemSelectedStatus: boolean | undefined;
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalItems: number = 0;
   textSearch!: string;
   listitemProvinceCode!: { pCode: string; pName: string }[];
   itemProvinceCode: string = '';
+
+  isShowOrHiddenForm: boolean = false;
+  currentModel!: districtDetailModel;
+  typeAction!: string;
 
   constructor(private manageAddressService: ManageAddressService) {}
   ngOnInit(): void {
@@ -70,7 +76,24 @@ export class DistrictComponent implements OnInit {
       });
   }
 
-  updateOrCreateAddress(add?: districtDetailModel) {}
+  updateOrCreateAddress(add?: districtDetailModel) {
+    console.log(add);
+    if (add) {
+      this.currentModel = add;
+      this.typeAction = TYPE_ACTION.UPDATE;
+    } else {
+      this.currentModel = {
+        cap: '',
+        id: 0,
+        isActive: false,
+        districtCode: '',
+        provinceCode: '',
+        districtName: '',
+      };
+      this.typeAction = TYPE_ACTION.CREATE;
+    }
+    this.isShowOrHiddenForm = true;
+  }
   deleteAddress(id: number | null) {
     if (id) {
       if (confirm('Bạn có chắc muốn xoá huyện/thành phố này không?')) {
@@ -91,7 +114,7 @@ export class DistrictComponent implements OnInit {
   onPageChange(page: number): void {
     this.currentPage = page;
     this.getListDistrict(
-      undefined,
+      this.itemSelectedStatus,
       this.currentPage,
       this.textSearch,
       this.itemProvinceCode
@@ -104,7 +127,22 @@ export class DistrictComponent implements OnInit {
     this.loadData();
   }
   loadData(): void {
-    this.getListDistrict(undefined, 1, this.textSearch, this.itemProvinceCode);
+    this.getListDistrict(
+      this.itemSelectedStatus,
+      1,
+      this.textSearch,
+      this.itemProvinceCode
+    );
     this.currentPage = 1;
+  }
+
+  selectedStatus() {
+    this.loadData();
+  }
+
+  listenStatusForm(value: boolean): void {
+    if (value) {
+    }
+    this.isShowOrHiddenForm = false;
   }
 }

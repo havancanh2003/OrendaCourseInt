@@ -1,8 +1,8 @@
-<nav>
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
-    <li class="nav-item">
-      <a routerLink="/dashboard" (click)="switchPage('dashboard')" [class.active]="currenPage === 'dashboard'"
-        class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+    <li routerLinkActive="active" class="nav-item">
+      <a routerLink="/dashboard" class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
+        aria-controls="ui-basic">
         <i class="icon-grid menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
@@ -120,35 +120,33 @@
         </ul>
       </div>
     </li> -->
-    <li class="nav-item">
-      <a routerLink="/manage-address" class="nav-link">
+    <li class="nav-item" routerLinkActive="active">
+      <a routerLink="/manage-address/tỉnh" class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Quản lý tỉnh</span>
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" routerLinkActive="active">
       <a routerLink="/manage-address/huyện-thành-phố" class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Quản lý huyện</span>
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" routerLinkActive="active">
       <a routerLink="/manage-address/xã-phường" class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Quản lý xã</span>
       </a>
     </li>
 
-    <li class="nav-item">
-      <a routerLink="/product" (click)="switchPage('product')" [class.active]="currenPage === 'product'"
-        class="nav-link">
+    <li class="nav-item" routerLinkActive="active">
+      <a routerLink="/product" class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Product-page</span>
       </a>
     </li>
-    <li class="nav-item">
-      <a routerLink="/profile" (click)="switchPage('profile')" [class.active]="currenPage === 'profile'"
-        class="nav-link">
+    <li class="nav-item" routerLinkActive="active">
+      <a routerLink="/profile" class="nav-link">
         <i class="icon-paper menu-icon"></i>
         <span class="menu-title">Profile-page</span>
       </a>

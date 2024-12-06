@@ -1,11 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  OnInit,
-} from '@angular/core';
-import { AuthService } from '../core/services/auth.service';
-import { getCookie } from '../helpers/helpers';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StateLoadingService } from '../shared/loading/state-loading.service';
 
@@ -24,32 +17,11 @@ export class LayoutsComponent implements OnInit {
     this.sidebar = document.querySelector('.sidebar')!;
     this.horizontalMenu = document.querySelector('.horizontal-menu')!;
 
-    //this.applyActiveClass();
     this.setupEventListeners();
   }
 
   constructor(private loadingService: StateLoadingService) {
     this.isLoading$ = this.loadingService.loading$;
-  }
-
-  // Add active class to nav-link dynamically
-  private applyActiveClass(): void {
-    const current = location.pathname
-      .split('/')
-      .slice(-1)[0]
-      .replace(/^\/|\/$/g, '');
-    const links = this.sidebar.querySelectorAll('.nav li a');
-
-    links.forEach((link: Element) => {
-      const href = (link as HTMLAnchorElement).getAttribute('href') || '';
-      if (href.indexOf(current) !== -1) {
-        this.addClass(link.closest('.nav-item')!, 'active');
-        if (link.closest('.sub-menu')) {
-          this.addClass(link.closest('.collapse')!, 'show');
-          this.addClass(link, 'active');
-        }
-      }
-    });
   }
 
   // Setup event listeners
@@ -124,13 +96,3 @@ export class LayoutsComponent implements OnInit {
     }
   }
 }
-// isLoading$: Observable<boolean>;
-// currenPage: string = 'dashboard';
-// isLoginSucces: boolean = true;
-// logoutTimeout: any;
-
-// constructor(private loadingService: StateLoadingService) {
-//   this.isLoading$ = this.loadingService.loading$;
-// }
-
-// ngOnInit(): void {}

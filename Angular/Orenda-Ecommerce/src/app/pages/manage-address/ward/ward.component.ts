@@ -10,7 +10,7 @@ import { TYPE_ACTION } from '../../../helpers/helpers';
 })
 export class WardComponent implements OnInit {
   wards: wardDetailModel[] = [];
-  itemSelectedStatus: boolean = true;
+  itemSelectedStatus: boolean | undefined;
   totalItems: number = 0;
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -139,7 +139,6 @@ export class WardComponent implements OnInit {
     }
   }
   updateOrCreateAddress(add?: wardDetailModel) {
-    console.log(add);
     if (add) {
       this.currentModel = add;
       this.typeAction = TYPE_ACTION.UPDATE;
