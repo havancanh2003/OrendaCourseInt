@@ -44,8 +44,18 @@ namespace Infrastructure.Common.Repositories
             if (p != null)
             {
                 p.IsDeleted = true;
-                await _context.SaveChangesAsync();
+                _context.Products.Update(p);
+                var result = await _context.SaveChangesAsync();
+                if (result == 0)
+                {
+                    throw new InvalidOperationException("No rows were updated in the database.");
+                }
             }
+        }
+
+        public async Task<Product?> GetProductActiveByIdAsync(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(x => x.Id == id && x.IsActive && !x.IsDeleted);
         }
     }
 }

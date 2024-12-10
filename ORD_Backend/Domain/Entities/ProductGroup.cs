@@ -11,7 +11,8 @@ namespace Domain.Entities
         [StringLength(100)]
         public string Name { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
-
+        public bool IsDeleted { get; set; }
+        public bool IsActive { get; set; }
         //  Fk
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }

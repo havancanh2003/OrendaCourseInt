@@ -9,5 +9,6 @@ namespace Application.Common.Interfaces
 {
     public interface IProductGroupRepository : IGenericRepository<ProductGroup>
     {
+        Task<int?> CheckProductGroupIsActiveById(int id);
     }
 }

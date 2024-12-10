@@ -7,5 +7,7 @@ namespace Application.Common.Interfaces
     public interface IProductRepository : IGenericRepository<Product>
     {
         Task<PaginationResult<Product>> GetAllProductByFilter(PaginationRequest request, int? categoryId, string? productName);
+        Task<Product?> GetProductActiveByIdAsync(int id);
+
     }
 }
