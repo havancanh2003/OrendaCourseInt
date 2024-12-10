@@ -1,0 +1,16 @@
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\bin\Debug\net8.0\Application.deps.json
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\bin\Debug\net8.0\Application.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\bin\Debug\net8.0\Application.pdb
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\bin\Debug\net8.0\Domain.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\bin\Debug\net8.0\Domain.pdb
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.csproj.AssemblyReference.cache
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.AssemblyInfoInputs.cache
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.AssemblyInfo.cs
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.csproj.CoreCompileInputs.cache
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.sourcelink.json
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.csproj.CopyComplete
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\refint\Application.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\Application.pdb
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Application\obj\Debug\net8.0\ref\Application.dll
