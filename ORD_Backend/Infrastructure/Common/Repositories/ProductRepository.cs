@@ -18,7 +18,8 @@ namespace Infrastructure.Common.Repositories
         public async Task<PaginationResult<Product>> GetAllProductByFilter(PaginationRequest request,int? categoryId, string? productName)
         {
             var query = _context.Products.AsQueryable();
-            
+
+            query = query.Where(p => p.IsActive && !p.IsDeleted);
             // thêm bộ lọc giữ liệu ở đây
             if (!string.IsNullOrWhiteSpace(productName))
             {

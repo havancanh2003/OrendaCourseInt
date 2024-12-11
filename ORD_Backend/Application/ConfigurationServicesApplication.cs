@@ -10,6 +10,8 @@ namespace Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductGroupService, ProductGroupService>();
+
             services.AddAutoMapper(typeof(MappingProfile));
             return services;
         }

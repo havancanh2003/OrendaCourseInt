@@ -84,6 +84,9 @@ namespace Application.Services
             var product = await _productRepository.GetByIdAsync(id);
             return _mapper.Map<ProductDto>(product);
         }
+        /// <summary>
+        /// lấy sản phẩm còn sử dụng
+        /// </summary>
         public async Task<ProductDto> GetProductActiveByIdAsync(int id)
         {
             var product = await _productRepository.GetProductActiveByIdAsync(id);
