@@ -1,0 +1,6 @@
+bin/Debug/
+obj/
+*.user
+*.suo
+*.dll
+*.pdb
