@@ -1,6 +1,6 @@
-﻿using Application.Interfaces;
-using Application.Mappings;
+﻿using Application.Mappings;
 using Application.Services;
+using Application.Services.Interfaces;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 namespace Application

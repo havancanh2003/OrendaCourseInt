@@ -1,5 +1,5 @@
 ﻿using Application.DTOs;
-using Application.Interfaces;
+using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Models;
 

@@ -23,6 +23,9 @@ namespace Infrastructure.Data.Configurations
             builder.Property(p => p.Quantity)
                .IsRequired();
 
+            builder.Property(p => p.IsActive)
+               .HasDefaultValue(true);
+
             builder.HasOne(p => p.ProductGroup) 
               .WithMany(pg => pg.Products)
               .HasForeignKey(p => p.ProductGroupId)

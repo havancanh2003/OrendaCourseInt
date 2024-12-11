@@ -2,7 +2,7 @@
 using Application.Common.Const;
 using Application.Common.Interfaces;
 using Application.DTOs;
-using Application.Interfaces;
+using Application.Services.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -34,7 +34,7 @@ namespace Application.Services
             var entity = _mapper.Map<ProductGroup>(model);
             entity.IsActive = true;
             await _productGroupRepository.AddAsync(entity);
-            return new DataResponse<ProductGroupDto>(new List<ProductGroupDto> { _mapper.Map<ProductGroupDto>(entity) }, true, DefindConstanMesseges.SUCCESS);
+            return new DataResponse<ProductGroupDto>(new List<ProductGroupDto> { _mapper.Map<ProductGroupDto>(entity) }, true, DefindConstantsMesseges.SUCCESS);
         }
     }
 }

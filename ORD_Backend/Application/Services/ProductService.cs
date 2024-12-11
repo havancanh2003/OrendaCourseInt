@@ -2,7 +2,7 @@
 using Application.Common.Const;
 using Application.Common.Interfaces;
 using Application.DTOs;
-using Application.Interfaces;
+using Application.Services.Interfaces;
 using AutoMapper;
 using Domain.Entities;
 
@@ -34,7 +34,7 @@ namespace Application.Services
             entity.IsActive = true;
             await _productRepository.AddAsync(entity);
 
-            return new DataResponse<ProductDto>(new List<ProductDto> { _mapper.Map<ProductDto>(entity) }, true, DefindConstanMesseges.SUCCESS);
+            return new DataResponse<ProductDto>(new List<ProductDto> { _mapper.Map<ProductDto>(entity) }, true, DefindConstantsMesseges.SUCCESS);
         }
         /// <summary>
         /// Service update sản phẩm
@@ -49,7 +49,7 @@ namespace Application.Services
             var entity = _mapper.Map<Product>(model);
             await _productRepository.UpdateAsync(entity);
 
-            return new DataResponse<ProductDto>(new List<ProductDto> { _mapper.Map<ProductDto>(entity) }, true, DefindConstanMesseges.SUCCESS);
+            return new DataResponse<ProductDto>(new List<ProductDto> { _mapper.Map<ProductDto>(entity) }, true, DefindConstantsMesseges.SUCCESS);
         }
         /// <summary>
         /// Service Xoá sản phẩm
@@ -57,7 +57,7 @@ namespace Application.Services
         public async Task<DataResponse<ProductDto>> DeleteProductAsync(int id)
         {
            await _productRepository.DeleteAsync(id);
-           return new DataResponse<ProductDto>(new List<ProductDto>(), true, DefindConstanMesseges.SUCCESS);
+           return new DataResponse<ProductDto>(new List<ProductDto>(), true, DefindConstantsMesseges.SUCCESS);
         }
         /// <summary>
         /// Service lấy tất cả sản phẩm

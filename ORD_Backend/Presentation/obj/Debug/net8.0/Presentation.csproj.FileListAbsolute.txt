@@ -6,7 +6,9 @@ C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Presentation.dll
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Presentation.pdb
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\AutoMapper.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Humanizer.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -110,4 +112,11 @@ C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\obj\Debug\net8.
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\obj\Debug\net8.0\Presentation.pdb
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\obj\Debug\net8.0\Presentation.genruntimeconfig.cache
 C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\obj\Debug\net8.0\ref\Presentation.dll
-C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Canh\OrendaCourseInt\OrendaCourseInt\ORD_Backend\Presentation\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
