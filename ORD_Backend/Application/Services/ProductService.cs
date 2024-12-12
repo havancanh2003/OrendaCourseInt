@@ -103,5 +103,11 @@ namespace Application.Services
             var product = await _unitOfWork.ProductRepository.GetProductActiveByIdAsync(id);
             return _mapper.Map<ProductDto>(product);
         }
+
+        public async Task<int> AddManyProductAsync(List<ProductDto> productDtos)
+        {
+            var r = await _unitOfWork.ProductRepository.AddManyProductAsync(_mapper.Map<List<Product>>(productDtos));
+            return r;
+        }
     }
 }

@@ -1,18 +1,22 @@
 ﻿using Application.Common.Pagination;
 using Application.Repository.Interfaces;
+using Dapper;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Infrastructure.Common.Repositories
 {
     public class ProductRepository : GenericRepository<Product>, IProductRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDapperDbConnection _dapperDbConnection;
 
-        public ProductRepository(ApplicationDbContext context) : base(context)
+        public ProductRepository(ApplicationDbContext context, IDapperDbConnection dapperDbConnection) : base(context)
         {
             _context = context;
+            _dapperDbConnection = dapperDbConnection;
         }
 
         public async Task<PaginationResult<Product>> GetAllProductByFilter(PaginationRequest request,int? categoryId, string? productName)
@@ -52,6 +56,31 @@ namespace Infrastructure.Common.Repositories
         public async Task<Product?> GetProductActiveByIdAsync(int id)
         {
             return await _context.Products.FirstOrDefaultAsync(x => x.Id == id && x.IsActive && !x.IsDeleted);
+        }
+        /// <summary>
+        /// đây là dapper
+        /// </summary>
+        public async Task<int> AddManyProductAsync(List<Product> list)
+        {
+            using (IDbConnection db = _dapperDbConnection.CreateConnection())
+            {
+                var pgIds = await db.QueryAsync<int>("SELECT ID FROM ProductGroup");
+                var l = new List<int>();
+                foreach (var product in list)
+                {
+                    if(!pgIds.Contains(product.ProductGroupId))
+                        throw new InvalidOperationException($"ProductGroupId {product.ProductGroupId} không hợp lệ.");
+                }
+                if(l.Count > 0)
+                    throw new InvalidOperationException("Một hoặc nhiều ProductGroupId không hợp lệ.");
+
+                var query = @"
+                            INSERT INTO Products (Name, Price, Quantity, ProductGroupId, IsActive,CreatedAt)
+                            VALUES (@Name, @Price, @Quantity, @ProductGroupId, @IsActive,GETDATE())";
+
+                var r = await db.ExecuteAsync(query, list);
+                return r;
+            }
         }
     }
 }

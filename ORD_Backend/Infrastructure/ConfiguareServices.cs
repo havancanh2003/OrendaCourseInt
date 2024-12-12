@@ -74,6 +74,7 @@ namespace Infrastructure
             // add services
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDapperDbConnection, DapperDbConnection>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IAuthResponse, AuthResponseService>();
             services.AddScoped<IProductGroupRepository, ProductGroupRepository>();

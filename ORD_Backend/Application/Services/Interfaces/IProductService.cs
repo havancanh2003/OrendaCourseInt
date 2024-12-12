@@ -13,5 +13,6 @@ namespace Application.Services.Interfaces
         Task<DataResponse<ProductDto>> UpdateProductAsync(ProductDto model);
         Task<DataResponse<ProductDto>> DeleteProductAsync(int id);
         Task<ProductDto> GetProductActiveByIdAsync(int id);
+        Task<int> AddManyProductAsync(List<ProductDto> productDtos);
     }
 }

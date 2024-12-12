@@ -9,6 +9,6 @@ namespace Application.Repository.Interfaces
     {
         Task<PaginationResult<Product>> GetAllProductByFilter(PaginationRequest request, int? categoryId, string? productName);
         Task<Product?> GetProductActiveByIdAsync(int id);
-
+        Task<int> AddManyProductAsync(List<Product> list);
     }
 }

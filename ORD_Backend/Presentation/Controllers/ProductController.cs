@@ -64,7 +64,7 @@ namespace Presentation.Controllers
         [HttpGet("active/{id}")]
         public async Task<IActionResult> GetProductActiveById(int id)
         {
-            var product = await _productService.GetProductByIdAsync(id);
+            var product = await _productService.GetProductActiveByIdAsync(id);
             if (product == null) return NotFound();
             return Ok(product);
         }
@@ -88,6 +88,35 @@ namespace Presentation.Controllers
                 };
                 var r = await _productService.AddProductAsync(pDto);
                 return Ok(r);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("add-many")]
+        //[Authorize(Policy = "Admin")]
+        public async Task<IActionResult> AddManyProduct([FromBody] List<ProductViewModel> model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var pDtos = model.Select(p => new ProductDto
+                {
+                    IsActive = p.IsActive,
+                    Name = p.Name.Trim(),
+                    Price = p.Price,
+                    ProductGroupId = p.ProductGroupId,
+                    Quantity = p.Quantity,
+                }).ToList();
+                var r = await _productService.AddManyProductAsync(pDtos);
+                string mes = $"Đã thêm thành công {r} sản phẩm";
+
+                return Ok(mes);
             }
             catch (Exception ex)
             {
