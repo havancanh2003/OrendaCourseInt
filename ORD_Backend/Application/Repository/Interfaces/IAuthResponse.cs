@@ -6,5 +6,7 @@ namespace Application.Repository.Interfaces
         Task<AuthResponse> SignUpAsync(SignUp model, string orgin);
 
         Task<AuthResponse> LoginAsync(Login model);
+
+        Task<string> ForgotPassword(ForgotPasswordRequest request);
     }
 }

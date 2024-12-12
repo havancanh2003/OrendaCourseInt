@@ -3,10 +3,12 @@ using Application.Repository.Interfaces;
 using Domain.Entities;
 using Domain.Settings;
 using Infrastructure.Common;
+using Infrastructure.Common.Email;
 using Infrastructure.Common.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Identity.Enums;
 using Infrastructure.Identity.Services;
+using MailKit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +80,7 @@ namespace Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IAuthResponse, AuthResponseService>();
             services.AddScoped<IProductGroupRepository, ProductGroupRepository>();
+            services.AddSingleton<IEmailServices, EmailServices>();
 
             return services;
         }

@@ -2,6 +2,7 @@
 using Application.Repository.Interfaces;
 using Domain.Entities;
 using Domain.Settings;
+using Infrastructure.Common.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,19 +20,65 @@ namespace Infrastructure.Identity.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailServices _emailServices;
         private readonly JWT _Jwt;
-        public AuthResponseService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt)
+        public AuthResponseService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailServices emailServices, IOptions<JWT> jwt)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailServices = emailServices;
             _Jwt = jwt.Value;
         }
+
+        public async Task<string> ForgotPassword(ForgotPasswordRequest request)
+        {
+            var mes = string.Empty;
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                mes = "Email không tồn tại.";
+                return mes;
+            }
+            var otp = new Random().Next(100000, 999999).ToString(); // 6 chữ số
+            var token = GeneratePasswordResetToken(request.Email, request.NewPassword, otp, DateTime.Now);
+            await _emailServices.SendEmailAsync(request.Email, "OTP Reset Password",
+                            $"Mã OTP của bạn là: {token}. Mã này có hiệu lực trong 15 phút.");
+
+            mes = "Mã OTP đã được gửi đến email.";
+            return mes;
+        }
+
+        private string GeneratePasswordResetToken(string email, string newPassword, string otp, DateTime time)
+        {
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Jwt.Key));
+
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim("email", email),
+                new Claim("newPassword", newPassword),
+                new Claim("otp", otp),
+                new Claim("expiryTime", time.ToString())
+            };
+
+            var token = new JwtSecurityToken(
+               issuer: _Jwt.Issuer,
+               audience: _Jwt.Audience,
+               claims: claims,
+               expires: DateTime.Now.AddMinutes(_Jwt.DurationInDays),
+               signingCredentials: signingCredentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
         public async Task<AuthResponse> LoginAsync(Login model)
         {
             var auth = new AuthResponse();
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            var userPassword = await _userManager.CheckPasswordAsync(user,model.Password);
+            var userPassword = await _userManager.CheckPasswordAsync(user, model.Password);
 
             if (user == null)
             {
@@ -150,5 +197,6 @@ namespace Infrastructure.Identity.Services
 
             return jwtSecurityToken;
         }
+
     }
 }
