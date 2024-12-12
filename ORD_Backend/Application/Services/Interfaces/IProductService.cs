@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.Common.Pagination;
 using Application.DTOs;
 
 namespace Application.Services.Interfaces

@@ -1,14 +1,14 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Repository;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Common.Repositories
+namespace Infrastructure.Common
 {
-    public class GenericRepository<T>: IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
-        public GenericRepository(ApplicationDbContext context) 
+        public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
@@ -16,7 +16,12 @@ namespace Infrastructure.Common.Repositories
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
+        }
+
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
         }
 
         public async Task<int> CountAsync()
@@ -39,10 +44,10 @@ namespace Infrastructure.Common.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+             _dbSet.Update(entity);
+            //await _context.SaveChangesAsync();
         }
     }
 }

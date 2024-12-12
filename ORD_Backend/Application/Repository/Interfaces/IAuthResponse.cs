@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Account;
-namespace Application.Common.Interfaces
+namespace Application.Repository.Interfaces
 {
     public interface IAuthResponse
     {

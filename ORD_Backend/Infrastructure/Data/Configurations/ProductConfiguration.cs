@@ -18,7 +18,9 @@ namespace Infrastructure.Data.Configurations
               .HasMaxLength(100);
 
             builder.Property(p => p.Price)
-             .IsRequired();
+            .IsRequired()
+            .HasColumnType("decimal(18,2)");
+
 
             builder.Property(p => p.Quantity)
                .IsRequired();
@@ -29,7 +31,7 @@ namespace Infrastructure.Data.Configurations
             builder.HasOne(p => p.ProductGroup) 
               .WithMany(pg => pg.Products)
               .HasForeignKey(p => p.ProductGroupId)
-              .OnDelete(DeleteBehavior.SetNull);
+              .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

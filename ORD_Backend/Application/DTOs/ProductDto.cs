@@ -15,6 +15,6 @@ namespace Application.DTOs
         public int Quantity { get; set; }
         public int ProductGroupId { get; set; }
         public bool IsActive { get; set; }
-        public bool IsDeleted { get; set; }
+        //public bool IsDeleted { get; set; }
     }
 }

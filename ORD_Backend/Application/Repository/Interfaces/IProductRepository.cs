@@ -1,8 +1,9 @@
-﻿using Application.DTOs;
+﻿using Application.Common.Pagination;
+using Application.Repository;
 using Domain.Entities;
 
 
-namespace Application.Common.Interfaces
+namespace Application.Repository.Interfaces
 {
     public interface IProductRepository : IGenericRepository<Product>
     {

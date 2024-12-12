@@ -1,16 +1,12 @@
 ﻿using Application.Common;
 using Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.Interfaces
 {
     public interface IProductGroupService
     {
         Task<List<ProductGroupDto>> GetAllProductGroup();
-        Task<DataResponse<ProductGroupDto>> AddProductAsync(ProductGroupDto model);
+        Task<DataResponse<ProductGroupDto>> AddProductGroupAsync(ProductGroupDto model);
+        Task<(ProductGroupDto info, List<ProductDto> pDtos)> AddManyProductInNewProductGroup(ProductGroupDto newProductGroup, ICollection<ProductDto> products);
     }
 }

@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces;
-using Application.DTOs.Account;
+﻿using Application.DTOs.Account;
+using Application.Repository.Interfaces;
 using Domain.Entities;
 using Domain.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -33,9 +33,14 @@ namespace Infrastructure.Identity.Services
             var user = await _userManager.FindByEmailAsync(model.Email);
             var userPassword = await _userManager.CheckPasswordAsync(user,model.Password);
 
-            if (user != null || !userPassword)
+            if (user == null)
             {
-                auth.Message = "Email or Password is incorrect";
+                auth.Message = "Email is incorrect";
+                return auth;
+            }
+            if (!userPassword)
+            {
+                auth.Message = "Password is incorrect";
                 return auth;
             }
 
@@ -46,6 +51,8 @@ namespace Infrastructure.Identity.Services
             auth.Roles = roles.ToList();
             auth.ISAuthenticated = true;
             auth.UserName = user.UserName;
+            auth.Id = user.Id;
+            auth.FullName = user.FullName;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
             auth.Message = "Login Succeeded ";
@@ -59,13 +66,13 @@ namespace Infrastructure.Identity.Services
             var auth = new AuthResponse();
 
             var userEmail = await _userManager.FindByEmailAsync(model.Email);
-            var userName = await _userManager.FindByNameAsync(model.Username);
+            //var userName = await _userManager.FindByNameAsync(model.Username);
 
             if (userEmail is not null)
                 return new AuthResponse { Message = "Email is Already used ! " };
 
-            if (userName is not null)
-                return new AuthResponse { Message = "Username is Already used ! " };
+            //if (userName is not null)
+            //    return new AuthResponse { Message = "Username is Already used ! " };
 
             var user = new ApplicationUser
             {
@@ -73,7 +80,7 @@ namespace Infrastructure.Identity.Services
                 Address = model.Address ?? "",
                 Description = model.Description ?? "",
                 DateOfBirth = model.DateOfBirth,
-                UserName = model.Username,
+                UserName = Guid.NewGuid().ToString(),
                 Email = model.Email
             };
 
@@ -92,14 +99,16 @@ namespace Infrastructure.Identity.Services
             }
             //assign role to user by default
 
-            var jwtSecurityToken = await CreateJwtAsync(user);
+            //var jwtSecurityToken = await CreateJwtAsync(user);
 
             auth.Email = user.Email;
             auth.Roles = new List<string> { "User" };
             auth.ISAuthenticated = true;
+            auth.Id = user.Id;
+            auth.FullName = user.FullName;
             auth.UserName = user.UserName;
-            auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            auth.TokenExpiresOn = jwtSecurityToken.ValidTo.ToLocalTime();
+            //auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            //auth.TokenExpiresOn = jwtSecurityToken.ValidTo.ToLocalTime();
             auth.Message = "SignUp Succeeded";
             await _userManager.AddToRoleAsync(user, "User");
 
@@ -120,6 +129,7 @@ namespace Infrastructure.Identity.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                //new Claim(JwtRegisteredClaimNames.Sub, user.FullName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("userId", user.Id),

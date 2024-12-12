@@ -23,19 +23,19 @@ namespace Domain.Entities
         /// 
         /// </summary>
         [Required(ErrorMessage = "Giá sản phẩm là bắt buộc")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Giá sản phẩm phải lớn hơn 0.")]
         public decimal Price { get; set; }
         /// <summary>
         /// 
         /// </summary>
         [Required(ErrorMessage = "Số lượng sản phẩm là bắt buộc.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 5.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Số lượng sản phẩm phải lớn hơn 5.")]
         public int Quantity { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        ///[Required(ErrorMessage = "Sản phẩm phải thuộc 1 danh mục nào đó")]
-        public int? ProductGroupId { get; set; }
+        [Required(ErrorMessage = "Sản phẩm phải thuộc 1 danh mục nào đó")]
+        public int ProductGroupId { get; set; }
         /// <summary>
         /// 
         /// </summary>

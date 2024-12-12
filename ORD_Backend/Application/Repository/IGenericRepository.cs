@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Common.Interfaces
+namespace Application.Repository
 {
     public interface IGenericRepository<T> where T : class
     {
@@ -30,7 +30,7 @@ namespace Application.Common.Interfaces
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task UpdateAsync(T entity);
+        void Update(T entity);
         /// <summary>
         /// Xóa đối tượng theo ID
         /// </summary>
@@ -41,6 +41,7 @@ namespace Application.Common.Interfaces
         /// Xóa đối tượng theo ID
         /// </summary>
         /// <returns></returns>
-        Task<int> CountAsync(); 
+        Task<int> CountAsync();
+        Task AddRangeAsync(IEnumerable<T> entities);
     }
 }

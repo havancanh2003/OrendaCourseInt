@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.Common.Pagination
 {
     public class PaginationResult<T>
     {
-        public PaginationResult(List<T> items, int totalRecords, int pageSize, int currentPage) {
+        public PaginationResult(List<T> items, int totalRecords, int pageSize, int currentPage)
+        {
             Items = items;
             TotalRecords = totalRecords;
             PageSize = pageSize;

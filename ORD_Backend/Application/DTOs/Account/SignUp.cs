@@ -12,7 +12,7 @@ namespace Application.DTOs.Account
     {
         [Required]
         [StringLength(100)]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = null!;
 
         public string? Address { get; set; }
 
@@ -22,16 +22,16 @@ namespace Application.DTOs.Account
 
         public string? Description { get; set; }
 
-        [StringLength(50)]
-        public string Username { get; set; }
+        //[StringLength(50)]
+        //public string Username { get; set; }
 
         [Required]
         [EmailAddress]
         [StringLength(128)]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [Required]
         [StringLength(256)]
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
     }
 }

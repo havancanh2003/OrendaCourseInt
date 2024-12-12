@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces;
-using Application.DTOs;
+﻿using Application.Common.Pagination;
+using Application.Repository.Interfaces;
 using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +20,7 @@ namespace Infrastructure.Common.Repositories
             var query = _context.Products.AsQueryable();
 
             query = query.Where(p => p.IsActive && !p.IsDeleted);
-            // thêm bộ lọc giữ liệu ở đây
+            // thêm bộ lọc giữ liệu ở đây nếu cần...
             if (!string.IsNullOrWhiteSpace(productName))
             {
                 query = query.Where(p => p.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
@@ -46,11 +46,6 @@ namespace Infrastructure.Common.Repositories
             {
                 p.IsDeleted = true;
                 _context.Products.Update(p);
-                var result = await _context.SaveChangesAsync();
-                if (result == 0)
-                {
-                    throw new InvalidOperationException("No rows were updated in the database.");
-                }
             }
         }
 

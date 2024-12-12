@@ -1,5 +1,7 @@
-﻿using Application.DTOs;
+﻿using Application.Common.Pagination;
+using Application.DTOs;
 using Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Models;
 
@@ -31,6 +33,7 @@ namespace Presentation.Controllers
             }
         }
         [HttpPost("filter")]
+        [Authorize]
         public async Task<IActionResult> GetAllProductsFilter(PaginationRequest request, int? categoryId, string? productName)
         {
             try
@@ -50,12 +53,14 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _productService.GetProductByIdAsync(id);
             if (product == null) return NotFound();
             return Ok(product);
         }
+
         [HttpGet("active/{id}")]
         public async Task<IActionResult> GetProductActiveById(int id)
         {
@@ -63,20 +68,20 @@ namespace Presentation.Controllers
             if (product == null) return NotFound();
             return Ok(product);
         }
+
         [HttpPost]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> AddProduct([FromBody] ProductViewModel model)
         {
             try
             {
-                var check = CheckRequestModel(model);
-                if (!check.isSuccess)
-                {
-                    return BadRequest(check.Mes);
+                if(!ModelState.IsValid) {
+                    return BadRequest(ModelState);
                 }
                 var pDto = new ProductDto
                 {
                     IsActive = model.IsActive,
-                    Name = model.Name,
+                    Name = model.Name.Trim(),
                     Price = model.Price,
                     ProductGroupId = model.ProductGroupId,
                     Quantity = model.Quantity,
@@ -89,7 +94,9 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPut("{id}")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> UpdateProduct(int id,[FromBody] ProductViewModel model)
         {
             try
@@ -99,16 +106,15 @@ namespace Presentation.Controllers
                 if(getP == null) 
                     return NotFound();
 
-                var check = CheckRequestModel(model);
-                if (!check.isSuccess)
+                if (!ModelState.IsValid)
                 {
-                    return BadRequest(check.Mes);
+                    return BadRequest(ModelState);
                 }
                 var pDto = new ProductDto
                 {
                     Id = getP.Id,
                     IsActive = model.IsActive,
-                    Name = model.Name,
+                    Name = model.Name.Trim(),
                     Price = model.Price,
                     ProductGroupId = model.ProductGroupId,
                     Quantity = model.Quantity,
@@ -123,6 +129,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> DeleteProduct(int id) 
         {
             try
@@ -134,15 +141,6 @@ namespace Presentation.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        private (bool isSuccess, string Mes) CheckRequestModel(ProductViewModel model)
-        {
-            if (model == null) return (false, "Không tồn tại dữ liệu sản phẩm.");
-            if (string.IsNullOrEmpty(model.Name)) return (false, "Tên sản phẩm không được để trống");
-            if (model.Quantity <= 0) return (false, "Số lượng sản phẩm phải lớn hơn 0");
-            if (model.Price <= 0) return (false, "Giá sản phẩm phải lớn hơn 0.");
-            return (true, string.Empty);
         }
     }
 }
