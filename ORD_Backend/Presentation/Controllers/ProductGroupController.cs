@@ -47,7 +47,7 @@ namespace Presentation.Controllers
             }
         }
 
-        [HttpPost("addManyProductInNewProductGroup")]
+        [HttpPost("add-many-product-to-new-pgroup")]
         //[Authorize(Policy = "Admin")]
         public async Task<IActionResult> AddManyProductInNewProductGroup([FromBody] AddManyProductInNewProductGroupViewModel model)
         {

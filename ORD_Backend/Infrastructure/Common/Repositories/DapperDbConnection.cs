@@ -1,6 +1,6 @@
 ﻿using Application.Repository.Interfaces;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using MySqlConnector;
 using System.Data;
 
 
@@ -17,7 +17,7 @@ namespace Infrastructure.Common.Repositories
 
         public IDbConnection CreateConnection()
         {
-            return new SqlConnection(_connectionString);
+            return new MySqlConnection(_connectionString);
         }
     }
 }

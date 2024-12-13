@@ -65,18 +65,14 @@ namespace Infrastructure.Common.Repositories
             using (IDbConnection db = _dapperDbConnection.CreateConnection())
             {
                 var pgIds = await db.QueryAsync<int>("SELECT ID FROM ProductGroup");
-                var l = new List<int>();
                 foreach (var product in list)
                 {
                     if(!pgIds.Contains(product.ProductGroupId))
                         throw new InvalidOperationException($"ProductGroupId {product.ProductGroupId} không hợp lệ.");
                 }
-                if(l.Count > 0)
-                    throw new InvalidOperationException("Một hoặc nhiều ProductGroupId không hợp lệ.");
-
                 var query = @"
-                            INSERT INTO Products (Name, Price, Quantity, ProductGroupId, IsActive,CreatedAt)
-                            VALUES (@Name, @Price, @Quantity, @ProductGroupId, @IsActive,GETDATE())";
+                            INSERT INTO Product (Name, Price, Quantity, ProductGroupId, IsActive,CreatedAt,IsDeleted)
+                            VALUES (@Name, @Price, @Quantity, @ProductGroupId, @IsActive,@CreatedAt,false)";
 
                 var r = await db.ExecuteAsync(query, list);
                 return r;

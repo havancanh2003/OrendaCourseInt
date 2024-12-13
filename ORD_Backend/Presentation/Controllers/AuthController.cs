@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Account;
 using Application.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,59 @@ namespace Presentation.Controllers
                 {
                     return BadRequest(result.Message);
                 }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        [HttpPost("add-role-user")]
+        //[Authorize(Policy = "SuperAdmin")]
+        public async Task<IActionResult> AddRolForUser([FromBody] UserNeedAddRoles model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _authService.AssignRoleForUser(model);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _authService.ForgotPassword(model);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        [HttpPost("confirm-OTP")]
+        public async Task<IActionResult> ConfirmOTP([FromBody] ConfirmOtpRequest model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var result = await _authService.ConfirmOtp(model);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -1,18 +1,18 @@
-﻿using Application.DTOs.Account;
+﻿using Application.Common;
+using Application.DTOs.Account;
 using Application.Repository.Interfaces;
 using Domain.Entities;
 using Domain.Settings;
 using Infrastructure.Common.Email;
+using Infrastructure.Identity.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Identity.Services
 {
@@ -29,7 +29,9 @@ namespace Infrastructure.Identity.Services
             _emailServices = emailServices;
             _Jwt = jwt.Value;
         }
-
+        /// <summary>
+        /// dịch vụ quên mật khẩu
+        /// </summary>
         public async Task<string> ForgotPassword(ForgotPasswordRequest request)
         {
             var mes = string.Empty;
@@ -39,40 +41,100 @@ namespace Infrastructure.Identity.Services
                 mes = "Email không tồn tại.";
                 return mes;
             }
-            var otp = new Random().Next(100000, 999999).ToString(); // 6 chữ số
-            var token = GeneratePasswordResetToken(request.Email, request.NewPassword, otp, DateTime.Now);
-            await _emailServices.SendEmailAsync(request.Email, "OTP Reset Password",
-                            $"Mã OTP của bạn là: {token}. Mã này có hiệu lực trong 15 phút.");
+            var OTP = GenerateShortPasswordResetOTP(user.Id, request.NewPassword, DateTime.Now);
+            await _emailServices.SendEmailAsync(
+                                request.Email,
+                                "OTP Reset Password",
+                                $@"
+                                <html>
+                                    <body>
+                                        <p>Mã OTP của bạn là: <strong>{OTP}</strong></p>
+                                        <p>Và mã người dùng của bạn là: <strong>{user.Id}</strong></p>
+                                        <p><em>Mã này có hiệu lực trong 15 phút.</em></p>
+                                    </body>
+                                </html>");
+
 
             mes = "Mã OTP đã được gửi đến email.";
             return mes;
         }
-
-        private string GeneratePasswordResetToken(string email, string newPassword, string otp, DateTime time)
+        /// <summary>
+        /// Tạo ra 1 mã OTP đơn giản
+        /// </summary>
+        private string GenerateShortPasswordResetOTP(string userId, string newPassword, DateTime expiryTime)
         {
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Jwt.Key));
+            var rawOTP = $"{userId}.{newPassword}.{expiryTime:O}";
 
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(rawOTP));
 
-            var claims = new[]
+            return base64;
+        }
+        /// <summary>
+        /// xác nhận otp
+        /// </summary>
+        public async Task<string> ConfirmOtp(ConfirmOtpRequest req)
+        {
+            var mes = string.Empty;
+            var decodeOTP = DecodeShortPasswordResetOTP(req.OTP);
+
+            if (decodeOTP.userId != req.userId)
             {
-                new Claim("email", email),
-                new Claim("newPassword", newPassword),
-                new Claim("otp", otp),
-                new Claim("expiryTime", time.ToString())
-            };
+                mes = "Mã OTP không chính xác";
+                return mes;
+            }
+            var user = await _userManager.FindByIdAsync(decodeOTP.userId);
+            if (user == null)
+            {
+                mes = "Không tồn tại người dùng trong hệ thống";
+                return mes;
+            }
 
-            var token = new JwtSecurityToken(
-               issuer: _Jwt.Issuer,
-               audience: _Jwt.Audience,
-               claims: claims,
-               expires: DateTime.Now.AddMinutes(_Jwt.DurationInDays),
-               signingCredentials: signingCredentials
-            );
+            var resetPasswordResult = await _userManager.RemovePasswordAsync(user);
+            if (!resetPasswordResult.Succeeded)
+            {
+                mes = "Không thể xóa mật khẩu cũ.";
+                return mes;
+            }
+            var addPasswordResult = await _userManager.AddPasswordAsync(user, decodeOTP.newPassword);
+            if (!addPasswordResult.Succeeded)
+            {
+                mes = "Không thể đặt mật khẩu mới.";
+                return mes;
+            }
+            mes = "Đổi mật khẩu thành công.";
+            return mes;
+        }
+        /// <summary>
+        /// decode mã OTP đơn giản
+        /// </summary>
+        private (string userId, string newPassword) DecodeShortPasswordResetOTP(string OTP)
+        {
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var decodedBytes = Convert.FromBase64String(OTP);
+            var decodedString = Encoding.UTF8.GetString(decodedBytes);
+
+            var parts = decodedString.Split('.');
+            if (parts.Length != 3)
+            {
+                throw new InvalidOperationException("OTP không hợp lệ.");
+            }
+
+            var converseExpiryTime = DateTime.Parse(parts[2]);
+            if ((DateTime.Now - converseExpiryTime).TotalMinutes > 30)
+            {
+                throw new InvalidOperationException("Thời gian mã otp đã hết hạn.");
+            }
+
+            var userId = parts[0];
+            var newPassword = parts[1];
+
+            return (userId, newPassword);
         }
 
+
+        /// <summary>
+        /// dịch vụ login
+        /// </summary>
         public async Task<AuthResponse> LoginAsync(Login model)
         {
             var auth = new AuthResponse();
@@ -108,6 +170,9 @@ namespace Infrastructure.Identity.Services
             return auth;
         }
 
+        /// <summary>
+        /// dịch vụ đăng kí tài khoản
+        /// </summary>
         public async Task<AuthResponse> SignUpAsync(SignUp model, string orgin)
         {
             var auth = new AuthResponse();
@@ -147,9 +212,10 @@ namespace Infrastructure.Identity.Services
             //assign role to user by default
 
             //var jwtSecurityToken = await CreateJwtAsync(user);
+            await _userManager.AddToRoleAsync(user, Roles.User.ToString());
 
             auth.Email = user.Email;
-            auth.Roles = new List<string> { "User" };
+            auth.Roles = new List<string> { Roles.User.ToString() };
             auth.ISAuthenticated = true;
             auth.Id = user.Id;
             auth.FullName = user.FullName;
@@ -157,11 +223,13 @@ namespace Infrastructure.Identity.Services
             //auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             //auth.TokenExpiresOn = jwtSecurityToken.ValidTo.ToLocalTime();
             auth.Message = "SignUp Succeeded";
-            await _userManager.AddToRoleAsync(user, "User");
 
             return auth;
         }
 
+        /// <summary>
+        /// tạo token
+        /// </summary>
         private async Task<JwtSecurityToken> CreateJwtAsync(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
@@ -197,6 +265,49 @@ namespace Infrastructure.Identity.Services
 
             return jwtSecurityToken;
         }
+        public async Task<DataResponse<string>> AssignRoleForUser(UserNeedAddRoles model)
+        {
+            var r = new DataResponse<string>(new List<string>(), true, string.Empty);
 
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                throw new Exception("không tồn tại người dùng trong hệ thống");
+            }
+            var roleUserInSystem = await _userManager.GetRolesAsync(user);
+            var allRolesInSystem = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+
+            var rolesAdded = new List<string>();
+            foreach (var role in model.roles)
+            {
+                if (!allRolesInSystem.Contains(role))
+                {
+                    throw new InvalidOperationException($"Không tồn tại {role} trong hệ thống.");
+                }
+                if (role == Roles.SuperAdmin.ToString())
+                {
+                    throw new InvalidOperationException("Không thể gán vai trò 'superadmin' cho người dùng.");
+                }
+
+                if (!roleUserInSystem.Contains(role))
+                {
+                    var result = await _userManager.AddToRoleAsync(user, role);
+                    if (!result.Succeeded)
+                    {
+                        foreach (var addedRole in rolesAdded)
+                        {
+                            await _userManager.RemoveFromRoleAsync(user, addedRole);
+                        }
+                        r.IsSuccess = false;
+                        r.Message = "Đã sảy ra lỗi trong quá trình thêm vai trò";
+                        return r;
+                    };
+                    rolesAdded.Add(role);
+                }
+            }
+            r.DataResult = rolesAdded;
+            r.Message = "Thêm vai trò thành công";
+            return r;
+        }
     }
 }

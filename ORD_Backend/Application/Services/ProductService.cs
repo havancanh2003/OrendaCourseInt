@@ -106,7 +106,16 @@ namespace Application.Services
 
         public async Task<int> AddManyProductAsync(List<ProductDto> productDtos)
         {
-            var r = await _unitOfWork.ProductRepository.AddManyProductAsync(_mapper.Map<List<Product>>(productDtos));
+            var products = productDtos.Select(pdt => new Product
+            {
+                CreatedAt = DateTime.Now,
+                IsActive = pdt.IsActive,
+                Name = pdt.Name,
+                Price = pdt.Price,
+                ProductGroupId = pdt.ProductGroupId,
+                Quantity = pdt.Quantity,
+            }).ToList();  
+            var r = await _unitOfWork.ProductRepository.AddManyProductAsync(products);
             return r;
         }
     }
