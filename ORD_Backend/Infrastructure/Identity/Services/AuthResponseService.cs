@@ -159,13 +159,11 @@ namespace Infrastructure.Identity.Services
             auth.Email = user.Email;
             auth.Roles = roles.ToList();
             auth.ISAuthenticated = true;
-            auth.UserName = user.UserName;
             auth.Id = user.Id;
             auth.FullName = user.FullName;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
             auth.Message = "Login Succeeded ";
-
 
             return auth;
         }
@@ -178,13 +176,9 @@ namespace Infrastructure.Identity.Services
             var auth = new AuthResponse();
 
             var userEmail = await _userManager.FindByEmailAsync(model.Email);
-            //var userName = await _userManager.FindByNameAsync(model.Username);
 
             if (userEmail is not null)
                 return new AuthResponse { Message = "Email is Already used ! " };
-
-            //if (userName is not null)
-            //    return new AuthResponse { Message = "Username is Already used ! " };
 
             var user = new ApplicationUser
             {
@@ -209,11 +203,11 @@ namespace Infrastructure.Identity.Services
 
                 return new AuthResponse { Message = errors };
             }
-            //assign role to user by default
 
-            //var jwtSecurityToken = await CreateJwtAsync(user);
+            //assign role to user by default (mặc định là role user)
             await _userManager.AddToRoleAsync(user, Roles.User.ToString());
 
+            //var jwtSecurityToken = await CreateJwtAsync(user);
             auth.Email = user.Email;
             auth.Roles = new List<string> { Roles.User.ToString() };
             auth.ISAuthenticated = true;
@@ -244,7 +238,6 @@ namespace Infrastructure.Identity.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                //new Claim(JwtRegisteredClaimNames.Sub, user.FullName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("userId", user.Id),
@@ -274,10 +267,14 @@ namespace Infrastructure.Identity.Services
             {
                 throw new Exception("không tồn tại người dùng trong hệ thống");
             }
+
             var roleUserInSystem = await _userManager.GetRolesAsync(user);
             var allRolesInSystem = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
 
+            // biến lưu role đã kiểm tra
             var rolesAdded = new List<string>();
+
+            // lọc những role của model khi đưa vào có tồn tại trong hệ thống hay không?
             foreach (var role in model.roles)
             {
                 if (!allRolesInSystem.Contains(role))
@@ -288,21 +285,28 @@ namespace Infrastructure.Identity.Services
                 {
                     throw new InvalidOperationException("Không thể gán vai trò 'superadmin' cho người dùng.");
                 }
-
-                if (!roleUserInSystem.Contains(role))
+                rolesAdded.Add(role);
+            }
+            // clear role cũ 
+            foreach (var role in roleUserInSystem)
+            {
+                var result = await _userManager.RemoveFromRoleAsync(user, role);
+                if (!result.Succeeded)
                 {
-                    var result = await _userManager.AddToRoleAsync(user, role);
-                    if (!result.Succeeded)
-                    {
-                        foreach (var addedRole in rolesAdded)
-                        {
-                            await _userManager.RemoveFromRoleAsync(user, addedRole);
-                        }
-                        r.IsSuccess = false;
-                        r.Message = "Đã sảy ra lỗi trong quá trình thêm vai trò";
-                        return r;
-                    };
-                    rolesAdded.Add(role);
+                    r.IsSuccess = false;
+                    r.Message = $"Lỗi khi xóa vai trò '{role}' khỏi người dùng.";
+                    return r;
+                }
+            }
+            // add role mới
+            foreach (var role in rolesAdded)
+            {
+                var result = await _userManager.AddToRoleAsync(user, role);
+                if (!result.Succeeded)
+                {
+                    r.IsSuccess = false;
+                    r.Message = $"Lỗi khi thêm vai trò '{role}' khỏi người dùng.";
+                    return r;
                 }
             }
             r.DataResult = rolesAdded;
