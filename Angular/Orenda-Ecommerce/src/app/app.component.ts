@@ -16,13 +16,13 @@ export class AppComponent {
     private loadingService: StateLoadingService,
     private cdr: ChangeDetectorRef
   ) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        if (!this.isAuthenticated() && event.url !== '/login') {
-          this.router.navigate(['/login']);
-        }
-      }
-    });
+    // this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationStart) {
+    //     if (!this.isAuthenticated() && event.url !== '/login') {
+    //       this.router.navigate(['/login']);
+    //     }
+    //   }
+    // });
 
     this.loadingService.loading$.subscribe((loading) => {
       this.isLoading = loading;
@@ -33,8 +33,8 @@ export class AppComponent {
     this.cdr.detectChanges();
   }
 
-  isAuthenticated(): boolean {
-    const token = getCookie('access_token');
-    return !!token;
-  }
+  // isAuthenticated(): boolean {
+  //   const token = getCookie('access_token');
+  //   return !!token;
+  // }
 }

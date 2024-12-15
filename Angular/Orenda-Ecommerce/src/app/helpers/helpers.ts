@@ -23,7 +23,7 @@ export function getCookie(name: any) {
   return null;
 }
 export function clearToken(): void {
-  document.cookie = 'access_token=; max-age=0; path=/';
+  document.cookie = 'token=; max-age=0; path=/';
 }
 export function concatenate(
   wardName: string,

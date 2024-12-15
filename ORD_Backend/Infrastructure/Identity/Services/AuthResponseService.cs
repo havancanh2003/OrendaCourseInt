@@ -140,30 +140,29 @@ namespace Infrastructure.Identity.Services
             var auth = new AuthResponse();
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            var userPassword = await _userManager.CheckPasswordAsync(user, model.Password);
-
             if (user == null)
             {
-                auth.Message = "Email is incorrect";
+                auth.Message = "Email không chính xác !!";
                 return auth;
             }
+
+            var userPassword = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!userPassword)
             {
-                auth.Message = "Password is incorrect";
+                auth.Message = "Password không chính xác !!";
                 return auth;
             }
 
             var jwtSecurityToken = await CreateJwtAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
 
-            auth.Email = user.Email;
             auth.Roles = roles.ToList();
             auth.ISAuthenticated = true;
             auth.Id = user.Id;
             auth.FullName = user.FullName;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
-            auth.Message = "Login Succeeded ";
+            auth.Message = "Đăng nhập thành công !";
 
             return auth;
         }
@@ -178,7 +177,7 @@ namespace Infrastructure.Identity.Services
             var userEmail = await _userManager.FindByEmailAsync(model.Email);
 
             if (userEmail is not null)
-                return new AuthResponse { Message = "Email is Already used ! " };
+                return new AuthResponse { Message = "Email này đã được đăng kí ! " };
 
             var user = new ApplicationUser
             {
@@ -192,7 +191,6 @@ namespace Infrastructure.Identity.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            //check result
             if (!result.Succeeded)
             {
                 var errors = string.Empty;
@@ -207,16 +205,15 @@ namespace Infrastructure.Identity.Services
             //assign role to user by default (mặc định là role user)
             await _userManager.AddToRoleAsync(user, Roles.User.ToString());
 
-            //var jwtSecurityToken = await CreateJwtAsync(user);
-            auth.Email = user.Email;
             auth.Roles = new List<string> { Roles.User.ToString() };
             auth.ISAuthenticated = true;
             auth.Id = user.Id;
             auth.FullName = user.FullName;
-            auth.UserName = user.UserName;
+            auth.Message = "Đăng kí người dùng thành công.";
+
+            //var jwtSecurityToken = await CreateJwtAsync(user);
             //auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             //auth.TokenExpiresOn = jwtSecurityToken.ValidTo.ToLocalTime();
-            auth.Message = "SignUp Succeeded";
 
             return auth;
         }

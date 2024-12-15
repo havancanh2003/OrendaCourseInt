@@ -26,9 +26,10 @@ export class LoginComponent {
 
     this.authService.loginUser(userName, passWord).subscribe(
       (res: any) => {
-        if (res && res.access_token) {
+        console.log(res);
+        if (res && res.token) {
           // Lưu access_token vào cookie
-          document.cookie = `access_token=${res.access_token}; max-age=300000; path=/; secure; samesite=strict`;
+          document.cookie = `token=${res.token}; max-age=30000; path=/; secure; samesite=strict`;
 
           //this.isSucces.emit(true);
           this.router.navigate(['']);

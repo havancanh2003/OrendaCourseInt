@@ -7,21 +7,19 @@ import { User, UserUpdate } from '../models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  _BASEURL: string = 'http://test.nghiencuukhoahoc.com.vn';
+  _BASEURL: string = 'https://localhost:7227';
 
   constructor(private http: HttpClient) {}
 
-  loginUser(username: string, password: string): Observable<any> {
-    const url = `${this._BASEURL}/api/app/account/login`;
-    const body = new HttpParams()
-      .set('userName', username)
-      .set('password', password);
+  loginUser(email: string, password: string): Observable<any> {
+    const url = `${this._BASEURL}/api/auth/signin`;
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-    });
+    const body = {
+      email: email,
+      password: password,
+    };
 
-    return this.http.post(url, body.toString(), { headers });
+    return this.http.post(url, body);
   }
 
   getInfo(): Observable<any> {
