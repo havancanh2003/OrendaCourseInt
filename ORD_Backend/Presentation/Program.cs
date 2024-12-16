@@ -53,6 +53,7 @@ builder.Services.AddCors(options =>
                             .AllowAnyMethod();
     });
 });
+builder.Services.AddMemoryCache(); 
 
 var app = builder.Build();
 using (IServiceScope? scope = app.Services.CreateScope())

@@ -14,11 +14,11 @@ export class authInterceptorsInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const access_token = getCookie('access_token');
-    if (access_token) {
+    const token = getCookie('token');
+    if (token) {
       const cloned = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 

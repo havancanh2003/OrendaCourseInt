@@ -9,6 +9,9 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { FormAddressComponent } from './profile-page/form-address/form-address.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { ManageAddressModule } from './manage-address/manage-address.module';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ConfirmOtpComponent } from './confirm-otp/confirm-otp.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,9 @@ import { ManageAddressModule } from './manage-address/manage-address.module';
     LoginComponent,
     ProfilePageComponent,
     FormAddressComponent,
+    ForgotPasswordComponent,
+    ConfirmOtpComponent,
+    RegisterComponent,
   ],
   imports: [
     CommonModule,
@@ -29,7 +35,9 @@ import { ManageAddressModule } from './manage-address/manage-address.module';
     DashboardComponent,
     LoginComponent,
     ProfilePageComponent,
-    //ProductModule,
+    ForgotPasswordComponent,
+    ConfirmOtpComponent,
+    RegisterComponent,
     NgModel,
   ],
 })

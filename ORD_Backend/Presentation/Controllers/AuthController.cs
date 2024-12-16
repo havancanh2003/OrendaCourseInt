@@ -106,7 +106,7 @@ namespace Presentation.Controllers
                     return BadRequest(ModelState);
                 }
                 var result = await _authService.ConfirmOtp(model);
-                return Ok(result);
+                return Ok(new {Mes = result.Mes, IsOk = result.IsOk});
             }
             catch (Exception ex)
             {

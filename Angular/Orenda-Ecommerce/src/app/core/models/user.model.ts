@@ -29,3 +29,12 @@ export interface UserUpdate {
   maHuyen: string;
   maXa: string;
 }
+export interface signupModel {
+  FullName: string;
+  Address?: string;
+  DateOfBirth: Date;
+  ProfilePictureUrl?: string;
+  Description: string;
+  Email: string;
+  Password: string;
+}

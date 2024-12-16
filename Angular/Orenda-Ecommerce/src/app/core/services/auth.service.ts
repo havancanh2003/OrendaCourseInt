@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User, UserUpdate } from '../models/user.model';
+import { signupModel, User, UserUpdate } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,14 +21,39 @@ export class AuthService {
 
     return this.http.post(url, body);
   }
+  forgotPassword(
+    email: string,
+    newPassword: string,
+    confirmPassword: string
+  ): Observable<any> {
+    const url = `${this._BASEURL}/api/auth/forgot-password`;
+
+    const body = {
+      email: email,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    };
+
+    return this.http.post(url, body, { responseType: 'text' as 'json' });
+  }
+  confirmOTP(email: string, OTP: string): Observable<any> {
+    const url = `${this._BASEURL}/api/auth/confirm-OTP`;
+
+    const body = {
+      email: email,
+      otp: OTP,
+    };
+
+    return this.http.post(url, body);
+  }
+  signUp(body: signupModel): Observable<any> {
+    const url = `${this._BASEURL}/api/auth/signup`;
+    return this.http.post(url, body);
+  }
 
   getInfo(): Observable<any> {
     const url = `${this._BASEURL}/api/app/account/get-account-bootstrap`;
     return this.http.get(url);
-  }
-  logoutUser(): Observable<any> {
-    const url = `${this._BASEURL}/api/app/account/logout`;
-    return this.http.post(url, {});
   }
 
   updateUser(body: UserUpdate): Observable<any> {

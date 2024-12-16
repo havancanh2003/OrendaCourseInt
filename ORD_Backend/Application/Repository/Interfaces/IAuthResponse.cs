@@ -9,7 +9,7 @@ namespace Application.Repository.Interfaces
         Task<AuthResponse> LoginAsync(Login model);
 
         Task<string> ForgotPassword(ForgotPasswordRequest request);
-        Task<string> ConfirmOtp(ConfirmOtpRequest req);
+        Task<(string Mes,bool IsOk)> ConfirmOtp(ConfirmOtpRequest req);
         Task<DataResponse<string>> AssignRoleForUser(UserNeedAddRoles model);
     }
 }

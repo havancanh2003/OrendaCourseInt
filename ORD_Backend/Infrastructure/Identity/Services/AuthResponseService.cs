@@ -7,12 +7,14 @@ using Infrastructure.Common.Email;
 using Infrastructure.Identity.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace Infrastructure.Identity.Services
 {
@@ -21,12 +23,14 @@ namespace Infrastructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailServices _emailServices;
+        private readonly IMemoryCache _memoryCache;
         private readonly JWT _Jwt;
-        public AuthResponseService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailServices emailServices, IOptions<JWT> jwt)
+        public AuthResponseService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IEmailServices emailServices, IMemoryCache memoryCache, IOptions<JWT> jwt)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailServices = emailServices;
+            _memoryCache = memoryCache;
             _Jwt = jwt.Value;
         }
         /// <summary>
@@ -41,7 +45,15 @@ namespace Infrastructure.Identity.Services
                 mes = "Email không tồn tại.";
                 return mes;
             }
-            var OTP = GenerateShortPasswordResetOTP(user.Id, request.NewPassword, DateTime.Now);
+            var OTP = GenerateShortPasswordResetOTP();
+            var cacheKey = $"otp_{request.Email}";  // Sử dụng email làm key
+
+            _memoryCache.Set(cacheKey, JsonConvert.SerializeObject(new CacheDataModel
+                            {
+                                NewPassword = request.NewPassword,
+                                CodeOTP = OTP,
+                            }), TimeSpan.FromMinutes(15));
+
             await _emailServices.SendEmailAsync(
                                 request.Email,
                                 "OTP Reset Password",
@@ -49,7 +61,6 @@ namespace Infrastructure.Identity.Services
                                 <html>
                                     <body>
                                         <p>Mã OTP của bạn là: <strong>{OTP}</strong></p>
-                                        <p>Và mã người dùng của bạn là: <strong>{user.Id}</strong></p>
                                         <p><em>Mã này có hiệu lực trong 15 phút.</em></p>
                                     </body>
                                 </html>");
@@ -61,77 +72,55 @@ namespace Infrastructure.Identity.Services
         /// <summary>
         /// Tạo ra 1 mã OTP đơn giản
         /// </summary>
-        private string GenerateShortPasswordResetOTP(string userId, string newPassword, DateTime expiryTime)
+        private string GenerateShortPasswordResetOTP()
         {
-            var rawOTP = $"{userId}.{newPassword}.{expiryTime:O}";
-
-            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(rawOTP));
-
-            return base64;
+            var random = new Random();
+            return random.Next(100000, 999999).ToString();
         }
         /// <summary>
         /// xác nhận otp
         /// </summary>
-        public async Task<string> ConfirmOtp(ConfirmOtpRequest req)
+        public async Task<(string Mes, bool IsOk)> ConfirmOtp(ConfirmOtpRequest req)
         {
             var mes = string.Empty;
-            var decodeOTP = DecodeShortPasswordResetOTP(req.OTP);
+            var user = await _userManager.FindByEmailAsync(req.Email);
 
-            if (decodeOTP.userId != req.userId)
-            {
-                mes = "Mã OTP không chính xác";
-                return mes;
-            }
-            var user = await _userManager.FindByIdAsync(decodeOTP.userId);
             if (user == null)
             {
-                mes = "Không tồn tại người dùng trong hệ thống";
-                return mes;
+                return ("Không tồn tại người dùng trong hệ thống", false);
+            }
+            var cacheKey = $"otp_{req.Email}";  
+            var storedOtp = _memoryCache.Get<string>(cacheKey);
+
+            if (storedOtp == null)
+                return ("Mã OTP đã hết hạn hoặc không tồn tại.", false);
+
+            var data = JsonConvert.DeserializeObject<CacheDataModel>(storedOtp);
+
+            if (data.CodeOTP != req.OTP)
+            {
+                return ("Mã OTP không hợp lệ.",false);
             }
 
             var resetPasswordResult = await _userManager.RemovePasswordAsync(user);
             if (!resetPasswordResult.Succeeded)
             {
-                mes = "Không thể xóa mật khẩu cũ.";
-                return mes;
+                _memoryCache.Remove(cacheKey);
+                var errors = string.Join(", ", resetPasswordResult.Errors.Select(error => error.Description));
+                return ($"Không thể đặt mật khẩu mới. Lỗi: {errors}",false);
             }
-            var addPasswordResult = await _userManager.AddPasswordAsync(user, decodeOTP.newPassword);
+
+            var addPasswordResult = await _userManager.AddPasswordAsync(user, data.NewPassword);
             if (!addPasswordResult.Succeeded)
             {
-                mes = "Không thể đặt mật khẩu mới.";
-                return mes;
+                _memoryCache.Remove(cacheKey);
+                var errors = string.Join(", ", addPasswordResult.Errors.Select(error => error.Description));
+                return ($"Không thể đặt mật khẩu mới. Lỗi: {errors}", false);
             }
-            mes = "Đổi mật khẩu thành công.";
-            return mes;
+
+            _memoryCache.Remove(cacheKey);
+            return ("Đổi mật khẩu thành công.", true);
         }
-        /// <summary>
-        /// decode mã OTP đơn giản
-        /// </summary>
-        private (string userId, string newPassword) DecodeShortPasswordResetOTP(string OTP)
-        {
-
-            var decodedBytes = Convert.FromBase64String(OTP);
-            var decodedString = Encoding.UTF8.GetString(decodedBytes);
-
-            var parts = decodedString.Split('.');
-            if (parts.Length != 3)
-            {
-                throw new InvalidOperationException("OTP không hợp lệ.");
-            }
-
-            var converseExpiryTime = DateTime.Parse(parts[2]);
-            if ((DateTime.Now - converseExpiryTime).TotalMinutes > 30)
-            {
-                throw new InvalidOperationException("Thời gian mã otp đã hết hạn.");
-            }
-
-            var userId = parts[0];
-            var newPassword = parts[1];
-
-            return (userId, newPassword);
-        }
-
-
         /// <summary>
         /// dịch vụ login
         /// </summary>
@@ -158,7 +147,7 @@ namespace Infrastructure.Identity.Services
 
             auth.Roles = roles.ToList();
             auth.ISAuthenticated = true;
-            auth.Id = user.Id;
+            //auth.Id = user.Id;
             auth.FullName = user.FullName;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
@@ -207,7 +196,7 @@ namespace Infrastructure.Identity.Services
 
             auth.Roles = new List<string> { Roles.User.ToString() };
             auth.ISAuthenticated = true;
-            auth.Id = user.Id;
+            //auth.Id = user.Id;
             auth.FullName = user.FullName;
             auth.Message = "Đăng kí người dùng thành công.";
 

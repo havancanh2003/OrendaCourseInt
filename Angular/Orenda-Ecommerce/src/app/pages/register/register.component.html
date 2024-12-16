@@ -1,0 +1,68 @@
+<div class="container-fluid page-body-wrapper full-page-wrapper">
+    <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+            <div class="col-lg-4 mx-auto">
+                <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                    <div class="brand-logo">
+                        <img src="../../../assets/themes/images/logo.svg" alt="logo">
+                    </div>
+                    <h4>New here?</h4>
+                    <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+                    <form [formGroup]='formRegister' (ngSubmit)="onSubmit()" class="pt-3">
+                        <div class="form-group">
+                            <input type="text" formControlName="fullName" class="form-control form-control-lg"
+                                placeholder="Full name"
+                                [class.is-invalid]="formRegister.get('fullName')?.invalid && formRegister.get('fullName')?.touched">
+                            <div *ngIf="formRegister.get('fullName')?.invalid && formRegister.get('fullName')?.touched"
+                                class="invalid-feedback">
+                                FullName là trường bắt buộc.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="email" formControlName="email" class="form-control form-control-lg"
+                                placeholder="Email"
+                                [class.is-invalid]="formRegister.get('email')?.invalid && formRegister.get('email')?.touched">
+                            <div *ngIf="formRegister.get('email')?.invalid && formRegister.get('email')?.touched"
+                                class="invalid-feedback">
+                                Email là trường bắt buộc.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" formControlName="password" class="form-control form-control-lg"
+                                placeholder="Password"
+                                [class.is-invalid]="formRegister.get('password')?.invalid && formRegister.get('password')?.touched">
+                            <div *ngIf="formRegister.get('password')?.invalid && formRegister.get('password')?.touched"
+                                class="invalid-feedback">
+                                Password là trường bắt buộc.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" formControlName="description" class="form-control form-control-lg"
+                                placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <input style="color: #CED4DA;" formControlName="dateOfBirth" type="date"
+                                class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <label class="form-check-label text-muted">
+                                    <input type="checkbox" formControlName="isAgree" class="form-check-input">
+                                    I agree to all Terms &amp; Conditions
+                                    <i class="input-helper"></i></label>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button [disabled]="!formRegister.valid"
+                                class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
+                                type="submit">SIGN UP</button>
+                        </div>
+                        <div class="text-center mt-4 font-weight-light">
+                            Already have an account? <a routerLink="/login" class="text-primary">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

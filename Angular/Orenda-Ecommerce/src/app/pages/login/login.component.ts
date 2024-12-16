@@ -1,39 +1,51 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
-  @Output() isSucces = new EventEmitter<boolean>();
-  username: string = '';
-  password = '';
+export class LoginComponent implements OnInit {
   errorMessage = '';
+  formLogin!: UntypedFormGroup;
 
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private fb: UntypedFormBuilder
   ) {}
 
-  submitlogin(): void {
-    const userName = this.username.trim();
-    const passWord = this.password.trim();
+  ngOnInit(): void {
+    this.initForm();
+  }
 
-    if (!userName || !passWord) {
-      this.errorMessage = 'Username và password không hợp lệ!';
+  initForm(): void {
+    this.formLogin = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
+  }
+
+  onSubmitLogin(): void {
+    const userName = this.formLogin.controls['email'];
+    const passWord = this.formLogin.controls['password'];
+    if (userName.invalid || passWord.invalid) {
       return;
     }
-
-    this.authService.loginUser(userName, passWord).subscribe(
+    this.authService.loginUser(userName.value.trim(), passWord.value).subscribe(
       (res: any) => {
         console.log(res);
         if (res && res.token) {
-          // Lưu access_token vào cookie
+          // Lưu token vào cookie
           document.cookie = `token=${res.token}; max-age=30000; path=/; secure; samesite=strict`;
 
           this.router.navigate(['']);

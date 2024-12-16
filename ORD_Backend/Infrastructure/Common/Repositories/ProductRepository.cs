@@ -57,6 +57,7 @@ namespace Infrastructure.Common.Repositories
         {
             return await _context.Products.FirstOrDefaultAsync(x => x.Id == id && x.IsActive && !x.IsDeleted);
         }
+
         /// <summary>
         /// đây là dapper
         /// </summary>

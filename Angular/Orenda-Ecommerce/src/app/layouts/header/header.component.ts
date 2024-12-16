@@ -14,10 +14,10 @@ export class HeaderComponent implements OnInit {
     this.initializeOffcanvasToggle();
   }
   submitLogout() {
-    this.authService.logoutUser().subscribe(() => {
-      clearToken();
-      this.router.navigate(['/login']);
-    });
+    clearToken();
+    this.router.navigate(['/login']);
+    // this.authService.logoutUser().subscribe(() => {
+    // });
   }
 
   private initializeOffcanvasToggle(): void {
