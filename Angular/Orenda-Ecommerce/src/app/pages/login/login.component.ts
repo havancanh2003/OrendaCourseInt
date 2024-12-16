@@ -41,25 +41,27 @@ export class LoginComponent implements OnInit {
     if (userName.invalid || passWord.invalid) {
       return;
     }
-    this.authService.loginUser(userName.value.trim(), passWord.value).subscribe(
-      (res: any) => {
-        console.log(res);
-        if (res && res.token) {
-          // Lưu token vào cookie
-          document.cookie = `token=${res.token}; max-age=30000; path=/; secure; samesite=strict`;
+    this.authService
+      .loginUser(userName.value.trim(), passWord.value)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
+          if (res && res.token) {
+            // Lưu token vào cookie
+            document.cookie = `token=${res.token}; max-age=30000; path=/; secure; samesite=strict`;
 
-          this.router.navigate(['']);
-          this.errorMessage = '';
-        } else {
-          this.errorMessage = 'Đăng nhập không thành công, vui lòng thử lại!';
+            this.router.navigate(['']);
+            this.errorMessage = '';
+          } else {
+            this.errorMessage = 'Đăng nhập không thành công, vui lòng thử lại!';
+            this.toastr.error(this.errorMessage);
+          }
+        },
+        error: (err: any) => {
+          console.error('Lỗi khi đăng nhập:', err);
+          this.errorMessage = 'Lỗi kết nối, vui lòng thử lại!';
           this.toastr.error(this.errorMessage);
-        }
-      },
-      (err: any) => {
-        console.error('Lỗi khi đăng nhập:', err);
-        this.errorMessage = 'Lỗi kết nối, vui lòng thử lại!';
-        this.toastr.error(this.errorMessage);
-      }
-    );
+        },
+      });
   }
 }

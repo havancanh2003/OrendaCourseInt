@@ -1,10 +1,10 @@
 export interface Product {
-  productId: number;
-  productName: string;
-  unitSold: number;
-  productStock: number;
-  expiryDate: Date;
-  categoryId: number;
+  id: Number;
+  name: string;
+  price: Number;
+  quantity: Number;
+  productGroupId: Number;
+  isActive: boolean;
 }
 export interface ProductModelCreateAndUpdate {
   product: Product;
