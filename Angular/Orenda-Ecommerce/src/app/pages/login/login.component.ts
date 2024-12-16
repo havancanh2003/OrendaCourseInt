@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,11 @@ export class LoginComponent {
   password = '';
   errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private router: Router
+  ) {}
 
   submitlogin(): void {
     const userName = this.username.trim();
@@ -31,16 +36,17 @@ export class LoginComponent {
           // Lưu access_token vào cookie
           document.cookie = `token=${res.token}; max-age=30000; path=/; secure; samesite=strict`;
 
-          //this.isSucces.emit(true);
           this.router.navigate(['']);
           this.errorMessage = '';
         } else {
           this.errorMessage = 'Đăng nhập không thành công, vui lòng thử lại!';
+          this.toastr.error(this.errorMessage);
         }
       },
       (err: any) => {
         console.error('Lỗi khi đăng nhập:', err);
         this.errorMessage = 'Lỗi kết nối, vui lòng thử lại!';
+        this.toastr.error(this.errorMessage);
       }
     );
   }
