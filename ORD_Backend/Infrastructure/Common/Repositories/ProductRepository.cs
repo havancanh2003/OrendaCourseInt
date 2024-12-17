@@ -19,19 +19,23 @@ namespace Infrastructure.Common.Repositories
             _dapperDbConnection = dapperDbConnection;
         }
 
-        public async Task<PaginationResult<Product>> GetAllProductByFilter(PaginationRequest request,int? categoryId, string? productName)
+        public async Task<PaginationResult<Product>> GetAllProductByFilter(PaginationRequest request,int? productGroupId, string? productName, bool? isActve)
         {
             var query = _context.Products.AsQueryable();
 
-            query = query.Where(p => p.IsActive && !p.IsDeleted);
+            query = query.Where(p => !p.IsDeleted);
             // thêm bộ lọc giữ liệu ở đây nếu cần...
+            if (isActve.HasValue)
+            {
+                query = query.Where(p => p.IsActive == isActve);
+            }
             if (!string.IsNullOrWhiteSpace(productName))
             {
                 query = query.Where(p => p.Name.Equals(productName, StringComparison.OrdinalIgnoreCase));
             }
-            if (categoryId.HasValue)
+            if (productGroupId.HasValue)
             {
-                query = query.Where(p => p.ProductGroupId == categoryId);
+                query = query.Where(p => p.ProductGroupId == productGroupId);
             }
             int totalRecords = await query.CountAsync();
 

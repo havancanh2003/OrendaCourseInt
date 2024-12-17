@@ -1,21 +1,84 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  Category,
+  ProductGroup,
   ProductModelCreateAndUpdate,
 } from '../../../core/models/product.model';
 import { ProductService } from '../../../core/services/product.service';
-import { CategoryService } from '../../../core/services/category.service';
+// import { CategoryService } from '../../../core/services/product-group.service';
 import { formatDate } from '../../../helpers/helpers';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductGroupService } from '../../../core/services/product-group.service';
 
 @Component({
   selector: 'app-form-create-update-product',
   templateUrl: './form-create-update-product.component.html',
   styleUrl: './form-create-update-product.component.scss',
 })
-export class FormCreateUpdateProductComponent {
-  @Input() id: number = 0;
-  @Output() isSubmit = new EventEmitter<boolean>();
-  // titleForm: string = '';
+export class FormCreateUpdateProductComponent implements OnInit {
+  formProduct!: UntypedFormGroup;
+  id!: string;
+  productGroups!: ProductGroup[];
+  titleForm: string = '';
+  constructor(
+    private toastr: ToastrService,
+    private productGroupService: ProductGroupService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: UntypedFormBuilder
+  ) {}
+  ngOnInit(): void {
+    this.initForm();
+    this.route.queryParams.subscribe((params) => {
+      this.id = params['id'] || null;
+      if (this.id) {
+        this.titleForm = 'Form Update Product';
+      } else {
+        this.titleForm = 'Form Add Product';
+      }
+    });
+  }
+  initForm(): void {
+    this.formProduct = this.fb.group({
+      name: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(0)]],
+      quantity: [null, [Validators.required, Validators.min(0)]],
+      productGroupId: [null, Validators.required],
+      isActive: [true],
+    });
+  }
+  submitForm() {
+    if (this.formProduct.invalid) {
+      this.formProduct.markAllAsTouched(); // Đánh dấu tất cả các trường để hiển thị lỗi
+      return;
+    }
+    // Xử lý khi form hợp lệ
+    console.log(this.formProduct.value);
+  }
+  loadProductGroup(): void {
+    this.productGroupService.getProductGroup().subscribe({
+      next: (res: any) => {
+        if (res) {
+          this.productGroups = res.map((pg: any) => ({
+            id: pg.id,
+            name: pg.name,
+          }));
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching products:', err);
+        this.toastr.error('Đã xảy ra lỗi trong quá trình lấy dữ liệu');
+      },
+    });
+  }
+  loadDataProduct(): void {}
+  // @Input() id: number = 0;
+  // @Output() isSubmit = new EventEmitter<boolean>();
   // expiryDateAsString: string = '';
   // pForm: ProductModelCreateAndUpdate = {
   //   product: {

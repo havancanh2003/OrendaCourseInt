@@ -32,16 +32,17 @@ namespace Presentation.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //[Authorize]
         [HttpPost("filter")]
-        [Authorize]
-        public async Task<IActionResult> GetAllProductsFilter(PaginationRequest request, int? categoryId, string? productName)
+        public async Task<IActionResult> GetAllProductsFilter(int page, int? productGroupId, string? productName, bool? isActve)
         {
             try
             {
-                if(request.Page <= 0) request.Page = 1;
-                if(request.PageSize <= 0) request.PageSize = 10;
+                var request = new PaginationRequest();
+                if (page <= 0) request.Page = 1;
+                request.PageSize = 10;
 
-                var all = await _productService.GetAllProductByFilter(request, categoryId, productName);
+                var all = await _productService.GetAllProductByFilter(request, productGroupId, productName, isActve);
 
                 return Ok(all);
 

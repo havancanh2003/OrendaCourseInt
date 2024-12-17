@@ -1,16 +1,18 @@
 export interface Product {
-  id: Number;
+  id: number;
   name: string;
-  price: Number;
-  quantity: Number;
-  productGroupId: Number;
+  price: number;
+  quantity: number;
+  productGroupId: number;
   isActive: boolean;
 }
 export interface ProductModelCreateAndUpdate {
   product: Product;
   isResult: boolean;
 }
-export interface Category {
-  categoryId: number;
-  categoryName: string;
+export interface ProductGroup {
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
 }

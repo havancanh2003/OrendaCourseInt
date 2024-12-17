@@ -8,7 +8,6 @@ using Infrastructure.Common.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Identity.Enums;
 using Infrastructure.Identity.Services;
-using MailKit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@ namespace Infrastructure
             var conn = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                options.UseMySql(conn, ServerVersion.AutoDetect(conn), options => { options.EnableStringComparisonTranslations(); });
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
             // kết thúc kết nối cơ sở dữ liệu

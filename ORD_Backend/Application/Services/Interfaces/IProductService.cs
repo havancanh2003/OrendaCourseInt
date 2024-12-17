@@ -8,7 +8,7 @@ namespace Application.Services.Interfaces
     {
         Task<ProductDto> GetProductByIdAsync(int id);
         Task<List<ProductDto>> GetAllProductAsync();
-        Task<PaginationResult<ProductDto>> GetAllProductByFilter(PaginationRequest request, int? categoryId, string? productName);
+        Task<PaginationResult<ProductDto>> GetAllProductByFilter(PaginationRequest request, int? productGroupId, string? productName, bool? isActve);
         Task<DataResponse<ProductDto>> AddProductAsync(ProductDto model);
         Task<DataResponse<ProductDto>> UpdateProductAsync(ProductDto model);
         Task<DataResponse<ProductDto>> DeleteProductAsync(int id);

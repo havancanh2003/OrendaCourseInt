@@ -38,3 +38,59 @@
         </div>
     </div>
 </div> -->
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">{{titleForm}}</h4>
+        <p class="card-description">
+            Form product
+        </p>
+        <form [formGroup]="formProduct" (ngSubmit)="submitForm()">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Product Name" formControlName="name" />
+                <div *ngIf="formProduct.get('name')?.touched && formProduct.get('name')?.invalid">
+                    <small class="text-danger">Name là trường bắt buộc.</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input id="price" formControlName="price" type="number" class="form-control" placeholder="Price" />
+                <div *ngIf="formProduct.get('price')?.touched && formProduct.get('price')?.invalid">
+                    <small class="text-danger" *ngIf="formProduct.get('price')?.errors?.['required']">Price is
+                        required.</small>
+                    <small class="text-danger" *ngIf="formProduct.get('price')?.errors?.['min']">Price must be at least
+                        0.</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input id="quantity" formControlName="quantity" type="number" class="form-control"
+                    placeholder="Price" />
+                <div *ngIf="formProduct.get('quantity')?.touched && formProduct.get('quantity')?.invalid">
+                    <small class="text-danger" *ngIf="formProduct.get('quantity')?.errors?.['required']">Quantity is
+                        required.</small>
+                    <small class="text-danger" *ngIf="formProduct.get('quantity')?.errors?.['min']">Quantity must be at
+                        least 0.</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="productGroupId">Product Group</label>
+                <select id="productGroupId" formControlName="productGroupId" class="form-control" placeholder="Price">
+                    <option [value]="null">Select group</option>
+                    <option *ngFor="let group of productGroups" [value]="group.id">{{ group.name }}</option>
+                </select>
+                <div *ngIf="formProduct.get('productGroupId')?.touched && formProduct.get('productGroupId')?.invalid">
+                    <small class="text-danger">Product group is required.</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="isActive">Active</label>
+                <input id="isActive" type="checkbox" formControlName="isActive" class="ml-3" />
+            </div>
+
+            <button type="" class="btn btn-primary mr-2">Submit</button>
+            <button class="btn btn-light">Cancel</button>
+        </form>
+    </div>
+
+</div>

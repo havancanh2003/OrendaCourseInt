@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,6 +13,27 @@ export class ProductService {
   getProducts(): Observable<any> {
     const url = `${this._BASEURL}/api/products`;
     return this.http.get(url);
+  }
+  getProductByFilter(
+    page: number,
+    productGroupId?: number,
+    productName?: string,
+    isActive?: boolean
+  ): Observable<any> {
+    const url = `${this._BASEURL}/api/products/filter`;
+    let params = new HttpParams().set('page', page);
+
+    if (productGroupId !== undefined && productGroupId !== null) {
+      params = params.set('productGroupId', productGroupId);
+    }
+    if (productName) {
+      params = params.set('productName', productName);
+    }
+    if (isActive !== undefined && isActive !== null) {
+      params = params.set('isActve', isActive);
+    }
+
+    return this.http.post(url, {}, { params });
   }
 
   // getProductById(id: number): Product | null {
@@ -61,7 +82,9 @@ export class ProductService {
 
   //   return true;
   // }
-  // deleteProduct(id: number): void {
-  //   this.products = this.products.filter((p) => p.productId !== id);
-  // }
+  deleteProduct(id: number): Observable<any> {
+    const url = `${this._BASEURL}/api/products/filter`;
+    let params = new HttpParams().set('id', id);
+    return this.http.post(url, {}, { params });
+  }
 }

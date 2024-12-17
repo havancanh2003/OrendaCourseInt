@@ -81,9 +81,9 @@ namespace Application.Services
         /// <summary>
         /// Service lấy tất cả sản phẩm theo bộ lọc
         /// </summary>
-        public async Task<PaginationResult<ProductDto>> GetAllProductByFilter(PaginationRequest request, int? categoryId, string? productName)
+        public async Task<PaginationResult<ProductDto>> GetAllProductByFilter(PaginationRequest request, int? productGroupId, string? productName, bool? isActve)
         {
-            var result = await _unitOfWork.ProductRepository.GetAllProductByFilter(request, categoryId, productName);
+            var result = await _unitOfWork.ProductRepository.GetAllProductByFilter(request, productGroupId, productName, isActve);
             return new PaginationResult<ProductDto>(_mapper.Map<List<ProductDto>>(result.Items),result.TotalRecords,result.PageSize,result.CurrentPage);
         }
 

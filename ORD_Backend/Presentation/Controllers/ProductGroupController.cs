@@ -6,7 +6,7 @@ using Presentation.Models;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/product-group")]
     [ApiController]
     public class ProductGroupController : ControllerBase
     {
